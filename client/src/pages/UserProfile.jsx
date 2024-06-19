@@ -48,6 +48,7 @@ const UserProfile = () => {
     // send the form data to the backend api endpoint
     try {
       const response = await fetch(`${host}/api/auth/uploadImage`, formData, {
+        method: "POST",
         headers: {
           "auth-token": token,
         },
