@@ -40,6 +40,27 @@ const UserProfile = () => {
     ref.current.click();
   };
 
+  const handleGetUser = async () => {
+    const response = await fetch(`${host}/api/auth/getUser`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+      // credentials: "include",
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      setLoggedUserDetails(data);
+      console.log(typeof loggedUserDetails);
+    }
+  };
+  useEffect(() => {
+    handleGetUser();
+    // eslint-disable-next-line
+  }, []);
+
   const handleUpload = async () => {
     // use form data to send file to the backend
     const formData = new FormData();
@@ -47,12 +68,16 @@ const UserProfile = () => {
 
     // send the form data to the backend api endpoint
     try {
-      const response = await fetch(`${host}/api/auth/uploadImage`, formData, {
-        method: "POST",
-        headers: {
-          "auth-token": token,
-        },
-      });
+      const response = await axios.post(
+        `${host}/api/auth/uploadImage`,
+        formData,
+        {
+          headers: {
+            "auth-token": token,
+          },
+          // credentials: "include",
+        }
+      );
       if (response.status >= 200 && response.status < 300) {
         toast.success("Image uploaded successfully!", {
           style: {
@@ -80,26 +105,6 @@ const UserProfile = () => {
     }
   };
 
-  const handleGetUser = async () => {
-    const response = await fetch(`${host}/api/auth/getUser`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": token,
-      },
-    });
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      setLoggedUserDetails(data);
-      console.log(typeof loggedUserDetails);
-    }
-  };
-  useEffect(() => {
-    handleGetUser();
-    // eslint-disable-next-line
-  }, []);
-
   const handleDeleteUser = async () => {
     try {
       const response = await fetch(
@@ -109,6 +114,7 @@ const UserProfile = () => {
           headers: {
             "auth-token": token,
           },
+          // credentials: "include",
         }
       );
       if (response.ok) {
@@ -138,6 +144,7 @@ const UserProfile = () => {
           headers: {
             "auth-token": token,
           },
+          // credentials: "include",
         }
       );
       if (response.ok) {
