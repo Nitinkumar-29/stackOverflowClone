@@ -68,16 +68,13 @@ const UserProfile = () => {
 
     // send the form data to the backend api endpoint
     try {
-      const response = await axios.post(
-        `${host}/api/auth/uploadImage`,
-        formData,
-        {
-          headers: {
-            "auth-token": token,
-          },
-          // credentials: "include",
-        }
-      );
+      const response = await fetch(`${host}/api/auth/uploadImage`, {
+        method: "POST",
+        headers: {
+          "auth-token": token,
+        },
+        body: formData,
+      });
       if (response.status >= 200 && response.status < 300) {
         toast.success("Image uploaded successfully!", {
           style: {
