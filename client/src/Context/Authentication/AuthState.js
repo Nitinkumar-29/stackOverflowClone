@@ -8,11 +8,12 @@ const AuthState = (props) => {
     //   const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
-    const host = "http://localhost:8000/api/auth";
+    // const host = "http://localhost:8000";
+    const host = "https://stackoverflowclone-backend.vercel.app"
 
     const handleLogin = async () => {
         try {
-            const response = await fetch(`${host}/login`, {
+            const response = await fetch(`${host}api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

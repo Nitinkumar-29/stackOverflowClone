@@ -5,8 +5,8 @@ import toast from "react-hot-toast";
 
 const AllQuestions = () => {
   const [questionsData, setQuestionsData] = useState([]);
-  const host = "http://localhost:8000";
-  // const host = "https://stackoverflowclone-backend.vercel.app";
+  // const host = "http://localhost:8000";
+  const host = "https://stackoverflowclone-backend.vercel.app";
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -104,56 +104,52 @@ const AllQuestions = () => {
         </div>
         {/* all question section */}
         <div className="flex flex-col items-start border-t-[1px] border-blue-100 space-y-2 w-full">
-          {questionsData.sort()?.map((question, index) => {
+          {questionsData.sort()?.map((question) => {
             return (
-              <>
-                <div className="w-full" key={index}>
-                  <div className="border-b-[0px] border-blue-100 flex flex-col space-y-2 pb-2 w-full">
-                    <div className="flex flex-col space-y-1 items-start">
-                      <Link
-                        to={`/questions/${question._id}`}
-                        className="text-sm md:text-base font-medium text-blue-500"
-                      >
-                        {question.QuestionTitle}
-                      </Link>
-                      <p className="text-xs md:text-sm">
-                        {question.QuestionDetails.length > 340
-                          ? `${question.QuestionDetails.slice(0, 340)}...`
-                          : question.QuestionDetails}
-                      </p>
-                    </div>
-                    <div className="flex flex-col md:flex-row justify-between space-y-2 md:space-x-2">
-                      <div className="space-x-2">
-                        {question.QuestionTags.map((tag, index) => {
-                          return (
-                            <>
-                              <span
-                                className="text-xs md:text-sm bg-blue-100 px-2 text-blue-500 py-1 rounded"
-                                key={index}
-                              >
-                                {tag}
-                              </span>
-                            </>
-                          );
-                        })}
-                      </div>
-                      {question.userName && (
-                        <div className="text-sm">
-                          <Link
-                            to="/userProfile"
-                            className="font-medium text-blue-600"
-                          >
-                            {question?.userName}
-                          </Link>{" "}
-                          {""}
-                          asked {formatTime(question.date)}
-                        </div>
-                      )}
-                    </div>
-                    <hr className=""></hr>
+              <div className="w-full" key={question._id}>
+                <div className="border-b-[0px] border-blue-100 flex flex-col space-y-2 pb-2 w-full">
+                  <div className="flex flex-col space-y-1 items-start">
+                    <Link
+                      to={`/questions/${question._id}`}
+                      className="text-sm md:text-base font-medium text-blue-500"
+                    >
+                      {question.QuestionTitle}
+                    </Link>
+                    <p className="text-xs md:text-sm">
+                      {question.QuestionDetails.length > 340
+                        ? `${question.QuestionDetails.slice(0, 340)}...`
+                        : question.QuestionDetails}
+                    </p>
                   </div>
+                  <div className="flex flex-col md:flex-row justify-between space-y-2 md:space-x-2">
+                    <div className="space-x-2">
+                      {question.QuestionTags.map((tag, index) => {
+                        return (
+                          <span
+                            className="text-xs md:text-sm bg-blue-100 px-2 text-blue-500 py-1 rounded"
+                            key={tag[index]}
+                          >
+                            {tag}
+                          </span>
+                        );
+                      })}
+                    </div>
+                    {question.userName && (
+                      <div className="text-sm">
+                        <Link
+                          to="/userProfile"
+                          className="font-medium text-blue-600"
+                        >
+                          {question?.userName}
+                        </Link>{" "}
+                        {""}
+                        asked {formatTime(question.date)}
+                      </div>
+                    )}
+                  </div>
+                  <hr className=""></hr>
                 </div>
-              </>
+              </div>
             );
           })}
         </div>

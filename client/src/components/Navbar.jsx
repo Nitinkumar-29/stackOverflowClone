@@ -26,8 +26,8 @@ const Navbar = () => {
   const [hamburgerMenuDisplay, setHamburgerMenuDisplay] = useState("hidden");
   const [hamburgerToggle, setHamburgerToggle] = useState(false);
   const token = localStorage.getItem("token");
-  const host = "http://localhost:8000";
-  // const host = "https://stackoverflowclone-backend.vercel.app"
+  // const host = "http://localhost:8000";
+  const host = "https://stackoverflowclone-backend.vercel.app"
 
   const toggleHamburgerMenu = (e) => {
     e.preventDefault();

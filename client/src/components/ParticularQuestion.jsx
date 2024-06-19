@@ -14,8 +14,8 @@ const ParticularQuestion = () => {
 
   const token = localStorage.getItem("token");
   const loggedUserId = localStorage.getItem("loggedUserId");
-  const host = "http://localhost:8000";
-  // const host = "https://stackoverflowclone-backend.vercel.app"
+  // const host = "http://localhost:8000";
+  const host = "https://stackoverflowclone-backend.vercel.app"
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -76,14 +76,17 @@ const ParticularQuestion = () => {
   const handleVoteUp = async () => {
     try {
       if (token) {
-        const response = await fetch(`${host}/api/questions/question/upVote/${id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-          // credentials: "include",
-        });
+        const response = await fetch(
+          `${host}/api/questions/question/upVote/${id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "auth-token": token,
+            },
+            // credentials: "include",
+          }
+        );
 
         if (response.ok) {
           await fetchTotalVotes();
@@ -113,14 +116,17 @@ const ParticularQuestion = () => {
   const handleVoteDown = async () => {
     try {
       if (token) {
-        const response = await fetch(`${host}/api/questions/question/downVote/${id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-          // credentials: "include",
-        });
+        const response = await fetch(
+          `${host}/api/questions/question/downVote/${id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "auth-token": token,
+            },
+            // credentials: "include",
+          }
+        );
         if (response.ok) {
           // eslint-disable-next-line
           const data = await response.json();
@@ -149,13 +155,16 @@ const ParticularQuestion = () => {
   };
 
   const fetchTotalVotes = async () => {
-    const response = await fetch(`${host}/api/questions/question/getVotes/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // credentials: "include",
-    });
+    const response = await fetch(
+      `${host}/api/questions/question/getVotes/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // credentials: "include",
+      }
+    );
     if (response.ok) {
       const data = await response.json();
       setVoteCount(data.totalVotes);
@@ -177,17 +186,20 @@ const ParticularQuestion = () => {
     if (token) {
       const { answerBody } = postQuestionAnswer;
       try {
-        const response = await fetch(`${host}/api/questions/question/answer/${id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "auth-token": token,
-          },
-          // credentials: "include",
-          body: JSON.stringify({
-            answerBody,
-          }),
-        });
+        const response = await fetch(
+          `${host}/api/questions/question/answer/${id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "auth-token": token,
+            },
+            // credentials: "include",
+            body: JSON.stringify({
+              answerBody,
+            }),
+          }
+        );
         if (response.ok) {
           const data = await response.json();
           toast.success("Answer posted successfully", {
@@ -234,13 +246,16 @@ const ParticularQuestion = () => {
 
   const fetchQuestionAnswers = async () => {
     try {
-      const response = await fetch(`${host}/api/questions/question/getAnswer/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // credentials: "include",
-        });
+      const response = await fetch(
+        `${host}/api/questions/question/getAnswer/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // credentials: "include",
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         setFetchQuestionAnswer(data);
@@ -282,7 +297,7 @@ const ParticularQuestion = () => {
           </div>
           <div className="flex flex-col md:flex-row w-full justify-between md:items-center">
             <div className="text-sm text-gray-400">
-              Asked on {" "}
+              Asked on{" "}
               <span className="text-black">
                 {formatTime(particularQuestionData.date)}
               </span>
@@ -315,19 +330,19 @@ const ParticularQuestion = () => {
             </div>
           )}
           <div className="flex flex-col space-y-2 h-full w-full">
-            <p className="text-sm lg:text-base">{particularQuestionData.QuestionDetails}</p>
+            <p className="text-sm lg:text-base">
+              {particularQuestionData.QuestionDetails}
+            </p>
             {/* tags and other data */}
             <div className="flex space-x-2">
               {particularQuestionData.QuestionTags &&
                 particularQuestionData.QuestionTags.map((tag, index) => {
                   return (
-                    <>
-                      <div className="flex" key={index}>
-                        <span className="text-xs bg-blue-100 text-blue-500 px-2 py-1 rounded md:text-sm">
-                          {tag}
-                        </span>
-                      </div>
-                    </>
+                    <div className="flex" key={index}>
+                      <span className="text-xs bg-blue-100 text-blue-500 px-2 py-1 rounded md:text-sm">
+                        {tag}
+                      </span>
+                    </div>
                   );
                 })}
             </div>
@@ -353,28 +368,26 @@ const ParticularQuestion = () => {
             {fetchQuestionAnswer.answers &&
               fetchQuestionAnswer.answers.map((answer, index) => {
                 return (
-                  <>
-                    <div
-                      className="flex flex-col border-b-[1px] border-gray-100 pb-2 space-y-2"
-                      key={index}
-                    >
-                      <span className="">{answer.answerBody}</span>
-                      <div className="flex items-center justify-between">
-                        <div className="text-sm text-gray-400">
-                          answered on {" "}
-                          <span className="text-black">
-                            {formatTime(answer.date)}
-                          </span>
-                        </div>
-                        <div className="text-sm">
-                          by{" "}
-                          <span className="font-medium text-blue-500">
-                            {answer.userName}
-                          </span>
-                        </div>
+                  <div
+                    className="flex flex-col border-b-[1px] border-gray-100 pb-2 space-y-2"
+                    key={index}
+                  >
+                    <span className="">{answer.answerBody}</span>
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm text-gray-400">
+                        answered on{" "}
+                        <span className="text-black">
+                          {formatTime(answer.date)}
+                        </span>
+                      </div>
+                      <div className="text-sm">
+                        by{" "}
+                        <span className="font-medium text-blue-500">
+                          {answer.userName}
+                        </span>
                       </div>
                     </div>
-                  </>
+                  </div>
                 );
               })}
           </div>
