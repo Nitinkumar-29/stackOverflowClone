@@ -15,7 +15,7 @@ app.use(
     methods: ["POST", "GET", "DELETE"],
   })
 );
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(express.static("uploads"));
 
 app.get("/", (req, res) => {
   res.json("hello world");
