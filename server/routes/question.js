@@ -6,7 +6,6 @@ const router = express.Router()
 const User = require("../models/User")
 const jwt = require("jsonwebtoken")
 const fetchUser = require("../middleware/fetchUser")
-const e = require("express")
 require("dotenv").config()
 
 // Router 1 to create a question
@@ -155,7 +154,7 @@ router.post("/question/upVote/:id", fetchUser, async (req, res) => {
         }
         // if the author tries to vote 
         if (question.user.toString() === userId) {
-            return res.status(500).json({ error: "you can't vote as you are the author of the question" })
+            return res.status(403).json({ error: "you can't vote as you are the author of the question" })
         }
 
 
@@ -198,7 +197,7 @@ router.post("/question/downVote/:id", fetchUser, async (req, res) => {
 
         // if the author tries to vote 
         if (question.user.toString() === userId) {
-            return res.status(500).json({ error: "you can't vote as you are the author of the question" })
+            return res.status(403).json({ error: "you can't vote as you are the author of the question" })
         }
 
         question.votes = question.upVotes.length - question.downVotes.length

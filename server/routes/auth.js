@@ -30,14 +30,6 @@ const upload = multer({
     storage: storage
 })
 
-// const transporter = nodemailer.createTransport({
-//     service: "gmail",
-//     auth: {
-//         user: "nimble2905@gmail.com",
-//         pass: "Nitin_kumar@2905",
-//     }
-// })
-
 // Router 1 : create user using post request
 router.post("/createUser", [
     body("name", "Enter your name").isLength({ min: 3 }),
@@ -79,22 +71,6 @@ router.post("/createUser", [
             },
         }
 
-        // const verificationLink = `http://localhost:3000/verify-email?token=${user.emailVerificationToken}`
-        // const mailOptions = {
-        //     from: "nimble2905@gmail.com",
-        //     to: user.email,
-        //     subject: "Verfiy your email",
-        //     text: `Click on the following link to verify the email: ${verificationLink}`
-        // }
-
-        // transporter.sendMail(mailOptions, (error, info) => {
-        //     if (error) {
-        //         return res.status(500).json({ success: false, error: "Failed to send verification email" })
-        //     }
-        //     res.status(200).json({ success: true, message: "Verification email sent" })
-        // })
-    
-
         const authToken = jwt.sign(data, process.env.JWT_SECRET)
         const success = true
         res.json({ success, authToken })
@@ -105,26 +81,6 @@ router.post("/createUser", [
     }
 })
 
-// Verify email route
-// router.get("/verify-email", async (req, res) => {
-//     const token = req.query.token;
-
-//     try {
-//         const user = await User.findOne({ emailVerificationToken: token })
-//         if (!user) {
-//             return res.status(404).json({ success: true, error: 'User not found or already verified' })
-//         }
-//         // update user status in the database
-//         user.isVerified = true;
-//         user.emailVerificationToken = undefined; //remove the token after verification
-//         await user.save();
-
-//         res.status(200).json({ success: true, message: 'email verified successfully' })
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json('internal server error')
-//     }
-// })
 
 // Router 2 : login using provided authentication token 
 router.post("/login", [
@@ -297,6 +253,4 @@ router.delete("/removeUser/:id", fetchUser, async (req, res) => {
         return res.json("Internal server error")
     }
 })
-
-// Route 9: Send email verification token
 module.exports = router;
