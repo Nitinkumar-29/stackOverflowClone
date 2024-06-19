@@ -110,7 +110,7 @@ const UserProfile = () => {
           headers: {
             "auth-token": token,
           },
-          credentials: "include",
+          // credentials: "include",
         }
       );
       if (response.ok) {
@@ -140,7 +140,7 @@ const UserProfile = () => {
           headers: {
             "auth-token": token,
           },
-          credentials: "include",
+          // credentials: "include",
         }
       );
       if (response.ok) {
