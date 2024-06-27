@@ -14,8 +14,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  // const host = "http://localhost:8000";
-  const host = "https://techaid-backend.vercel.app";
+  const host = "http://localhost:8000";
+  // const host = "https://techaid-backend.vercel.app";
   const [passwordType, setPasswordType] = useState("password");
   const [credentials, setCredentials] = useState({
     name: "",
@@ -166,7 +166,7 @@ const SignUp = () => {
                     name="name"
                     onChange={onChange}
                     value={credentials.name}
-                    className="border-[1px] border-gray-500 w-full py-1 rounded-md px-1 focus:outline-none focus:placeholder:text-blue-500"
+                    className="border-[1px] border-gray-500 w-full bg-inherit py-1 rounded-md px-1 focus:outline-none focus:placeholder:text-blue-500"
                   />
                 </div>
                 <div className="flex flex-col items-start w-full px-5 py-2 space-y-1">
@@ -180,7 +180,7 @@ const SignUp = () => {
                     name="email"
                     onChange={onChange}
                     value={credentials.email}
-                    className="border-[1px] border-gray-500 w-full py-1 rounded-md px-1 focus:outline-none focus:placeholder:text-blue-500"
+                    className="border-[1px] border-gray-500 w-full bg-inherit py-1 rounded-md px-1 focus:outline-none focus:placeholder:text-blue-500"
                   />
                 </div>
                 <div className="flex flex-col items-start w-full px-5 py-2 space-y-1">

@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, } from "react";
+import React, { useContext, useEffect } from "react";
 import AuthContext from "../Context/Authentication/AuthContext";
+import { FaUser } from "react-icons/fa";
 
 const AllUsers = () => {
-  const {  host, imageHost, usersData, fetchAllUsers } =
-    useContext(AuthContext);
+  const { host, imageHost, usersData, fetchAllUsers } = useContext(AuthContext);
 
   useEffect(() => {
     fetchAllUsers();
@@ -19,11 +19,15 @@ const AllUsers = () => {
                 className="flex justify-between w-full text-sm space-x-2 border-[0px] shadow-gray-300 shadow-md rounded-md p-2 border-sky-600"
                 key={index}
               >
-                <img
-                  className="w-[50px] h-[50px] rounded-md content-normal object-cover"
-                  src={`${imageHost}/${user?.profileImage?.data}`}
-                  alt=""
-                />
+                {user?.profileImage ? (
+                  <img
+                    className="w-[50px] h-[50px] rounded-md content-normal object-cover"
+                    src={`${imageHost}/${user?.profileImage?.data}`}
+                    alt=""
+                  />
+                ) : (
+                  <FaUser size={40}/>
+                )}
                 <div className="flex flex-col flex-wrap w-full items-start justify-center h-full">
                   <span className="text-blue-600 font-semibold">
                     {user.name}

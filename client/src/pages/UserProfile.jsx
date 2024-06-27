@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import AuthContext from "../Context/Authentication/AuthContext";
 
 const UserProfile = () => {
-  const { token, imageHost, handleGetUser, loggedUserData } =
+  const { token, host, imageHost, handleGetUser, loggedUserData } =
     useContext(AuthContext);
   const navigate = useNavigate();
   const ref = useRef();
@@ -20,8 +20,6 @@ const UserProfile = () => {
     address: "",
   });
   const [uploadingImage, setUploadingImage] = useState(0);
-  // const host = "http://localhost:8000"
-  const host = "https://techaid-backend.vercel.app";
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
