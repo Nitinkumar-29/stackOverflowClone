@@ -9,7 +9,7 @@ const AskQuestion = () => {
   QuestionTags: [],
   });
   // const host = "http://localhost:8000";
-  const host = "https://stackoverflowclone-backend.vercel.app"
+  const host = "https://techaid-backend.vercel.app"
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();

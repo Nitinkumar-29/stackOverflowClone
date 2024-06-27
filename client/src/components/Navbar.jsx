@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { FaBell, FaUser } from "react-icons/fa";
-import toast from "react-hot-toast";
 import AuthContext from "../Context/Authentication/AuthContext";
 
 const Navbar = () => {

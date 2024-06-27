@@ -11,8 +11,8 @@ export const QuestionState = ({ children }) => {
   const [postQuestionAnswerData, setPostQuestionAnswerData] = useState({
     answerBody: "",
   });
-  // const host = "http://localhost:8000";
-  const host = "https://stackoverflowclone-backend.vercel.app";
+  const host = "http://localhost:8000";
+  // const host = "https://techaid-backend.vercel.app";
 
   const fetchAllQuestions = async () => {
     try {

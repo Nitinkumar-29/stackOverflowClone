@@ -12,7 +12,7 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use(
   cors({
     origin: [
-      "https://stackoverflowclone-beta.vercel.app",
+      "https://techaid.vercel.app",
       // "http://localhost:3000",
     ],
     methods: ["POST", "GET", "DELETE", "PUT"],

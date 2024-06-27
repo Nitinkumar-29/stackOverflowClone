@@ -1,15 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import toast from "react-hot-toast";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./hideScrollbar.css";
 import { BiCopy, BiSolidDownvote, BiSolidUpvote } from "react-icons/bi";
 import { QuestionContext } from "../Context/questions/QuestionContext";
-import AuthContext from "../Context/Authentication/AuthContext";
 import { formatTime } from "../Utils/utils";
 
 const ParticularQuestion = () => {
   const {
-    token,
     particularQuestionData,
     fetchQuestionData,
     voteUp,
@@ -22,7 +20,6 @@ const ParticularQuestion = () => {
     setPostQuestionAnswerData,
     voteDown,
   } = useContext(QuestionContext);
-  const { navigate } = useContext(AuthContext);
   const { id } = useParams();
 
   useEffect(() => {

@@ -9,9 +9,9 @@ export const AuthProvider = (props) => {
   const [usersData, setUsersData] = useState([]);
   const [loggedUserData, setLoggedUserData] = useState([]);
   // const host = "http://localhost:8000";
-  const host = "https://stackoverflowclone-backend.vercel.app"
+  const host = "https://techaid-backend.vercel.app"
   // const imageHost = "http://localhost:8000";
-  const imageHost = "https://stackoverflowclone-backend.vercel.app"
+  const imageHost = "https://techaid-backend.vercel.app"
   const navigate = useNavigate();
 
   const login = async () => {
