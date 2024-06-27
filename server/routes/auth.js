@@ -287,7 +287,21 @@ router.delete("/removeUser/:id", fetchUser, async (req, res) => {
       return res.status(400).json("User not found");
     }
     await Question.deleteMany({ user });
-    // await Question.updateMany({ "votes.userId": userId }, { $pull: { votes: { userId: userId } } })
+    // Remove the user's votes from questions and update the vote counts
+    const questions = await Question.find({
+      $or: [{ upVotes: userId }, { downVotes: userId }],
+    });
+
+    for (let question of questions) {
+      question.upVotes = question.upVotes.filter(
+        (vote) => vote.toString() !== userId
+      );
+      question.downVotes = question.downVotes.filter(
+        (vote) => vote.toString() !== userId
+      );
+      question.votes = question.upVotes.length - question.downVotes.length;
+      await question.save();
+    }
     await User.findByIdAndDelete(userId);
     await QuestionAnswer.deleteMany({ user });
     return res.json("Account deleted successfully");
@@ -296,4 +310,64 @@ router.delete("/removeUser/:id", fetchUser, async (req, res) => {
     return res.json("Internal server error");
   }
 });
+
+// route to check whether the new email user want to update with is already resgistered or not
+router.post(
+  "/checkUniqueEmail",
+  body("email").isEmail().withMessage("Invalid email format"), // Validate email format
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const { email } = req.body;
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(409).json("Email already exists in the system"); // Use 409 Conflict for existing email
+      }
+
+      res.status(200).json("Email is unique");
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json("Internal server error");
+    }
+  }
+);
+
+// route to update user info
+router.put(
+  "/updateUserInfo",
+  fetchUser,
+  [
+    body("email").isEmail().withMessage("Invalid email format"),
+    body("name", "name"),
+    body("jobTitle"),
+    body("address"),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const userId = req.user.id;
+    const { email, address, jobTitle, name } = req.body;
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json("User not found");
+      }
+      user.name = name || user.name;
+      user.jobTitle = jobTitle || user.jobTitle;
+      user.email = email || user.email;
+      user.address = address || user.address;
+      await user.save();
+      res.status(200).json({ user });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json("Internal server error");
+    }
+  }
+);
+
 module.exports = router;

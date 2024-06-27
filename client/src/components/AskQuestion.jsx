@@ -6,7 +6,7 @@ const AskQuestion = () => {
   const [writeQuestion, setWriteQuestion] = useState({
     QuestionTitle: "",
     QuestionDetails: "",
-    QuestionTags: [],
+  QuestionTags: [],
   });
   // const host = "http://localhost:8000";
   const host = "https://stackoverflowclone-backend.vercel.app"
@@ -55,14 +55,14 @@ const AskQuestion = () => {
   };
   return (
     <>
-      <div className="flex w-[90%] mx-auto h-[120vh]">
-        <div className="flex flex-col justify-center items-center space-y-10 h-full mx-8 w-full">
-          <span className="font-bold text-2xl lg:text-3xl w-full">
+      <div className="flex justify-center w-full h-full bg-slate-950 text-gray-400">
+        <div className="flex flex-col mx-auto justify-center items-center space-y-10 h-full m-8 w-[90%]">
+          <span className="font-bold text-2xl lg:text-3xl w-fit mx-auto">
             Ask a public question
           </span>
-          <div className="flex flex-col items-start h-[100vh] w-full space-y-10">
+          <div className="flex flex-col items-start h-full w-full space-y-10">
             {/* instruction to write a good question */}
-            <div className="text-sm bg-blue-50 border-[1px] rounded-md border-sky-600 lg:h-[35vh] md:w-[70%] p-5 space-y-2">
+            <div className="text-sm bg-blue-50 border-[1px] mx-auto rounded-md border-sky-600 lg:h-[35vh] md:w-[70%] p-5 space-y-2">
               <span className="text-xl">Writing a good question</span>
               <div className="space-y-2">
                 <div className="flex flex-col">
@@ -104,7 +104,7 @@ const AskQuestion = () => {
             </div>
             <form
               onSubmit={handlePostQuestion}
-              className="md:w-[70%] py-5 space-y-6"
+              className="md:w-[70%] mx-auto py-5 space-y-6"
             >
               {/* question title */}
               <div className="rounded border-[1px] border-gray-300 p-5 flex flex-col w-full items-start space-y-1">
@@ -116,7 +116,7 @@ const AskQuestion = () => {
                   person
                 </p>
                 <input
-                  className="text-sm focus:outline-none border-gray-400 border-[1px] w-full px-2 py-1 rounded"
+                  className="text-sm text-black focus:outline-none border-gray-400 border-[1px] w-full px-2 py-1 rounded"
                   onChange={onChange}
                   value={writeQuestion.QuestionTitle}
                   name="QuestionTitle"
@@ -134,7 +134,7 @@ const AskQuestion = () => {
                   The body of your question contains your problem detail.
                 </p>
                 <textarea
-                  className="flex flex-col text-sm focus:outline-none border-gray-400 border-[1px] w-full px-2 py-1 rounded"
+                  className="flex flex-col text-black text-sm focus:outline-none border-gray-400 border-[1px] w-full px-2 py-1 rounded"
                   type="text"
                   onChange={onChange}
                   value={writeQuestion.QuestionDetails}
@@ -154,7 +154,7 @@ const AskQuestion = () => {
                   write member of community.
                 </p>
                 <input
-                  className="text-sm focus:outline-none border-gray-400 border-[1px] w-full px-2 py-1 rounded"
+                  className="text-sm text-black focus:outline-none border-gray-400 border-[1px] w-full px-2 py-1 rounded"
                   type="text"
                   onChange={(e) =>
                     setWriteQuestion({

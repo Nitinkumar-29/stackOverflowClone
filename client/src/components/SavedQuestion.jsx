@@ -2,7 +2,7 @@ import React from 'react'
 
 const SavedQuestion = () => {
   return (
-    <div className='mt-10 text-xl'>
+    <div className='flex justify-center w-full mt-6 text-xl'>
       This page is under construction
     </div>
   )

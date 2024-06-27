@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import {
-  FaComment,
   FaCommentAlt,
   FaFacebook,
   FaGithub,
   FaGoogle,
-  FaIdBadge,
   FaLink,
-  FaStackOverflow,
   FaTag,
   FaTrophy,
   FaVoteYea,
@@ -18,7 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 const SignUp = () => {
   const navigate = useNavigate();
   // const host = "http://localhost:8000";
-  const host = "https://stackoverflowclone-backend.vercel.app"
+  const host = "https://stackoverflowclone-backend.vercel.app";
   const [passwordType, setPasswordType] = useState("password");
   const [credentials, setCredentials] = useState({
     name: "",
@@ -67,25 +64,25 @@ const SignUp = () => {
             borderRadius: "10px",
             border: "2px solid rgb(251,146,60)",
           });
-          navigate("/home");
+          navigate("/questions");
         }
       } catch (error) {
         console.error(error);
       }
     } else {
       toast.error("Both password doesn't match", {
-        style:{
-          color:"black",
-          backgroundColor:"white",
-          borderRadius:"10px",
-          border:"2px solid rgb(251,146,60)"
-        }
-      })
+        style: {
+          color: "black",
+          backgroundColor: "white",
+          borderRadius: "10px",
+          border: "2px solid rgb(251,146,60)",
+        },
+      });
     }
   };
   return (
     <>
-      <div className="flex items-center justify-center lg:h-[100%] bg-gray-100">
+      <div className="flex items-center justify-center lg:h-[100%] bg-slate-950 text-white">
         <div className="w-[70%] flex flex-col lg:flex-row space-y-2 lg:space-y-0 h-fit items-center my-10">
           {/* welcome thread */}
           <div className="flex justify-center w-full">
@@ -156,7 +153,7 @@ const SignUp = () => {
             <div className="flex flex-col items-start justify-center space-y-2 w-80">
               <form
                 onSubmit={handleSignUp}
-                className="flex flex-col items-start justify-center w-full bg-white  border-[1px] border-gray-200 shadow-md rounded-md shadow-gray-300 py-2"
+                className="flex flex-col items-start justify-center w-full bg-inherit  border-[1px] border-gray-200 shadow-md rounded-md shadow-gray-300 py-2"
               >
                 <div className="flex flex-col items-start w-full px-5 py-2 space-y-1">
                   <label className="font-semibold" htmlFor="name">
@@ -197,7 +194,7 @@ const SignUp = () => {
                     name="password"
                     onChange={onChange}
                     value={credentials.password}
-                    className="border-[1px] border-gray-500 w-full py-1 rounded-md px-1 focus:outline-none focus:placeholder:text-blue-500"
+                    className="border-[1px] border-gray-500 bg-inherit w-full py-1 rounded-md px-1 focus:outline-none focus:placeholder:text-blue-500"
                   />
                 </div>
                 <div className="px-5 py-1 text-sm flex items-center space-x-1">
@@ -220,7 +217,7 @@ const SignUp = () => {
                     name="confirmPassword"
                     onChange={onChange}
                     value={credentials.confirmPassword}
-                    className="border-[1px] border-gray-500 w-full py-1 rounded-md px-1 focus:outline-none focus:placeholder:text-blue-500"
+                    className="border-[1px] border-gray-500 bg-inherit w-full py-1 rounded-md px-1 focus:outline-none focus:placeholder:text-blue-500"
                   />
                 </div>
                 <span className="flex w-72 mx-auto px-2 justify-center">

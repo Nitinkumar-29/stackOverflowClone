@@ -1,24 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaPencilAlt, FaPlus } from "react-icons/fa";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaCamera, FaEdit } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import toast from "react-hot-toast";
-import axios from "axios";
+import AuthContext from "../Context/Authentication/AuthContext";
 
 const UserProfile = () => {
-  const [loggedUserDetails, setLoggedUserDetails] = useState([]);
-  const token = localStorage.getItem("token");
-  const location = useLocation();
+  const { token, host, imageHost, handleGetUser, loggedUserData } =
+    useContext(AuthContext);
   const navigate = useNavigate();
   const ref = useRef();
-
-  // const host = "http://localhost:8000";
-  const host = "https://stackoverflowclone-backend.vercel.app";
-  // const imageHost = "http://localhost:8000/";
-  const imageHost = "https://stackoverflowclone-backend.vercel.app/";
-
+  const [editUser, setEditUser] = useState(false);
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [updateUserData, setUpdateUserData] = useState({
+    name: "",
+    jobTitle: "",
+    email: "",
+    address: "",
+  });
+  const [uploadingImage, setUploadingImage] = useState(0);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -40,26 +41,10 @@ const UserProfile = () => {
     ref.current.click();
   };
 
-  const handleGetUser = async () => {
-    const response = await fetch(`${host}/api/auth/getUser`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": token,
-      },
-      // credentials: "include",
-    });
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      setLoggedUserDetails(data);
-      console.log(typeof loggedUserDetails);
-    }
-  };
   useEffect(() => {
     handleGetUser();
     // eslint-disable-next-line
-  }, []);
+  }, [token]);
 
   const handleUpload = async () => {
     // use form data to send file to the backend
@@ -67,6 +52,7 @@ const UserProfile = () => {
     formData.append("profileImage", file);
 
     // send the form data to the backend api endpoint
+    setUploadingImage(0);
     try {
       const response = await fetch(`${host}/api/auth/uploadImage`, {
         method: "POST",
@@ -75,6 +61,7 @@ const UserProfile = () => {
         },
         body: formData,
       });
+      setUploadingImage(50);
       if (response.status >= 200 && response.status < 300) {
         toast.success("Image uploaded successfully!", {
           style: {
@@ -84,6 +71,7 @@ const UserProfile = () => {
             border: "2px solid rgb(251,146,60)",
           },
         });
+        setUploadingImage(100);
         setFile(null);
         await handleGetUser();
       } else {
@@ -101,17 +89,56 @@ const UserProfile = () => {
       console.error(error);
     }
   };
+  useEffect(() => {
+    file && handleUpload();
+    // eslint-disable-next-line
+  }, [file]);
 
-  const handleDeleteUser = async () => {
+  const handleDeleteUser = () => {
+    toast.custom((t) =>
+      ({
+        duration: 6000,
+      }(
+        <div
+          className={`${
+            t.visible ? "animate-enter" : "animate-leave"
+          } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+        >
+          <div className="flex-1 w-0 p-4">
+            <div className="flex items-start">
+              <div className="flex-shrink-0 pt-0.5"></div>
+              <div className="ml-3 flex-1">
+                <p className="text-sm font-medium text-gray-900">
+                  Hey {loggedUserData.user.name}
+                </p>
+                <p className="mt-1 text-sm text-gray-500">
+                  You won't be able to reverse this action
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex border-l border-gray-200">
+            <button
+              onClick={handleDeleteAccount}
+              className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              Delete Account
+            </button>
+          </div>
+        </div>
+      ))
+    );
+  };
+
+  const handleDeleteAccount = async () => {
     try {
       const response = await fetch(
-        `${host}/api/auth/removeUser/${loggedUserDetails.user._id}`,
+        `${host}/api/auth/removeUser/${loggedUserData.user._id}`,
         {
           method: "DELETE",
           headers: {
             "auth-token": token,
           },
-          // credentials: "include",
         }
       );
       if (response.ok) {
@@ -124,7 +151,7 @@ const UserProfile = () => {
           },
         });
         await localStorage.removeItem("token");
-        navigate("/home");
+        navigate(-1);
         console.log("account deleted");
       }
     } catch (error) {
@@ -135,13 +162,12 @@ const UserProfile = () => {
   const handleDeleteUserImage = async () => {
     try {
       const response = await fetch(
-        `${host}/api/auth/removeImage/${loggedUserDetails.user._id}`,
+        `${host}/api/auth/removeImage/${loggedUserData.user._id}`,
         {
           method: "DELETE",
           headers: {
             "auth-token": token,
           },
-          // credentials: "include",
         }
       );
       if (response.ok) {
@@ -156,8 +182,6 @@ const UserProfile = () => {
         await handleGetUser();
         setImagePreview(null);
         setFile(null);
-        // await localStorage.removeItem("token");
-        // navigate("/home");
         console.log("image removed");
       }
     } catch (error) {
@@ -165,144 +189,253 @@ const UserProfile = () => {
     }
   };
 
+  const onChange = (e) => {
+    setUpdateUserData({ ...updateUserData, [e.target.name]: e.target.value });
+  };
+
+  // update user info
+  const handleUpdateInfo = async () => {
+    try {
+      const response = await fetch(`${host}/api/auth/updateUserInfo`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": token,
+        },
+        body: JSON.stringify(updateUserData),
+      });
+      if (!response.ok) {
+        console.log(response);
+      }
+      const data = await response.json();
+      console.log(data);
+      toast.success("Updated!");
+      setEditUser(false);
+      handleGetUser();
+    } catch (error) {
+      console.error(error);
+      toast.error(error);
+    }
+  };
+
   return (
     <>
-      <div className="flex w-[90%] mx-auto justify-center">
-        <div className="flex flex-col md:flex-row space-y-5 md:space-y-0 md:space-x-5 w-full md:h-[90vh]">
-          <div className="w-full md:w-[20%] h-full mx-auto bg-gray-50 flex justify-center">
-            <Link
-              className="flex items-center my-4 border-[1px] border-sky-800 bg-sky-600 text-white h-fit rounded px-4 py-2"
-              to="/home"
-            >
-              <FaArrowLeft className="mx-1" /> Back to Home
-            </Link>
-          </div>
-          <div className="flex flex-col w-[100%] bg-gray-50">
-            <div className="m-4">
-              <div className="flex flex-col w-full justify-between">
-                <div className="flex md:w-[40%] space-x-2">
-                  {/* user image */}
-                  {!loggedUserDetails?.user?.profileImage?.data && (
-                    <div className="w-fit space-y-3 p-2">
-                      {!imagePreview && (
-                        <input
-                          ref={ref}
-                          type="file"
-                          accept="image/*"
-                          name="profileImage"
-                          className="hidden w-fit"
-                          onChange={handleFileChange}
-                        />
-                      )}
-                      {!imagePreview && (
-                        <span
-                          onClick={handleSelectFile}
-                          className="cursor-pointer w-16 h-16 border-2 border-gray-800 flex items-center justify-center"
-                        >
-                          <FaPlus />
-                        </span>
-                      )}
-                      {imagePreview && (
-                        <img
-                          src={imagePreview}
-                          alt=""
-                          className="w-[100px] h-[100px] mt-2 object-cover"
-                        />
-                      )}
-                      {imagePreview && (
-                        <button
-                          onClick={handleUpload}
-                          className="border-[1px] rounded border-gray-500 px-3 py-1 text-sm"
-                        >
-                          Upload
-                        </button>
-                      )}
-                    </div>
+      <div className="flex justify-center w-full bg-slate-950 max-h-screen h-[89.15vh] text-gray-400">
+        <div className="lg:w-[90%] h-full py-8 space-y-5">
+          <div className="flex shadow-md shadow-slate-600 border-[1px] border-slate-700 rounded-md h-[30%] w-full">
+            {/* user image */}
+            <div className="flex items-center h-full w-[25%] p-4">
+              {!loggedUserData?.user?.profileImage?.data && (
+                <div className="w-fit space-y-3 p-2">
+                  {!imagePreview && (
+                    <input
+                      ref={ref}
+                      type="file"
+                      accept="image/*"
+                      name="profileImage"
+                      className="hidden w-fit"
+                      onChange={handleFileChange}
+                    />
                   )}
-                  {loggedUserDetails?.user?.profileImage?.data ? (
-                    <div className="w-full relative">
+                  {!imagePreview && (
+                    <span
+                      onClick={handleSelectFile}
+                      className="cursor-pointer w-[120px] rounded-full h-[120px] border-2 border-gray-800 flex items-center justify-center"
+                    >
+                      <FaCamera />
+                    </span>
+                  )}
+                  <div className="flex flex-col items-center">
+                    {imagePreview && (
                       <img
-                        className="w-[120px] h-[120px] rounded-sm content-normal object-cover"
-                        src={`${imageHost}${loggedUserDetails?.user?.profileImage?.data}`}
+                        src={imagePreview}
                         alt=""
+                        className="w-[80px] h-[80px] rounded-full object-cover"
                       />
-                      <span
-                        onClick={handleDeleteUserImage}
-                        className="md:w-fit cursor-pointer text-xs flex my-2 border-[1px] border-gray-500 py-1 px-2 items-center rounded"
-                      >
-                        <AiFillDelete />
-                        remove photo
-                      </span>
-                    </div>
-                  ) : null}
-                  {loggedUserDetails.user && (
-                    <div className="flex w-full flex-col items-start m-4">
-                      <span className="font-normal text-2xl md:text-3xl">
-                        {loggedUserDetails.user.name}
-                      </span>
-                      {/* <span>{loggedUserDetails.user.email}</span> */}
-                    </div>
-                  )}
-                </div>
-                <div className="md:w-[26%] flex justify-between">
-                  <div className="text-xs flex  cursor-pointer border-[1px] rounded-md border-gray-600 h-fit w-36 md:w-32 px-2 py-2">
-                    <FaPencilAlt className="mt-[2.5px] mx-2"></FaPencilAlt>
-                    Edit profile
+                    )}
+                    {imagePreview && (
+                      <span className="text-center">{uploadingImage} </span>
+                    )}
                   </div>
-                  <div
+                </div>
+              )}
+              {loggedUserData?.user?.profileImage?.data && (
+                <div className="relative h-fit rounded-full shadow-md shadow-gray-200 border-2">
+                  <img
+                    className="w-[120px] h-[120px] rounded-full"
+                    src={`${imageHost}/${loggedUserData?.user?.profileImage?.data}`}
+                    alt=""
+                  />
+                  <span className="cursor-pointer absolute top-[72%] right-[5%]  p-1 rounded-full bg-slate-200">
+                    <AiFillDelete
+                      color="black"
+                      size={20}
+                      onClick={handleDeleteUserImage}
+                    />
+                  </span>
+                </div>
+              )}
+            </div>
+            {loggedUserData?.user && (
+              <div className="flex justify-between items-end pb-5 w-[75%]">
+                <div className="flex flex-col space-y-2 text-gray-200">
+                  <span className="text-5xl font-semibold">
+                    {loggedUserData.user.name}
+                  </span>
+                  <span className="text-xl">{loggedUserData.user.email}</span>
+                </div>
+                <div className="flex space-x-4 px-4">
+                  <button
                     onClick={handleDeleteUser}
-                    className="text-xs flex  cursor-pointer border-[1px] rounded-md border-gray-600 h-fit w-36 md:w-32 px-2 py-2"
+                    className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md"
                   >
                     <AiFillDelete className="mt-[2.5px] mx-2"></AiFillDelete>
                     Delete Account
-                  </div>
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (token) {
+                        localStorage.removeItem("token");
+                        navigate("/welcome");
+                      }
+                    }}
+                    className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md"
+                  >
+                    <AiFillDelete className="mt-[2.5px] mx-2"></AiFillDelete>
+                    LogOut
+                  </button>
                 </div>
               </div>
-              {/* other part */}
-              <div className="hidden flex-col space-y-4 w-full h-fit mt-10">
-                {/* 1st part w-full */}
-                <div className="flex space-x-4 items-center mx-auto border-[1px] border-gray-500 rounded bg-gray-100 w-full h-12">
-                  <div className="flex justify-around w-[40%]">
-                    <Link
-                      to="/profile"
-                      className={`border-[1px] border-gray-400 px-4 py-1 text-sm rounded-full ${
-                        location.pathname === "/profile" ? "bg-orange-400" : ""
-                      }`}
-                    >
-                      Profile
-                    </Link>
-                    <Link
-                      to="/activity"
-                      className={`border-[1px] border-gray-400 px-4 py-1 text-sm rounded-full ${
-                        location.pathname === "/activity" ? "bg-orange-400" : ""
-                      }`}
-                    >
-                      Activity
-                    </Link>
-                    <Link
-                      to="/saved"
-                      className={`border-[1px] border-gray-400 px-4 py-1 text-sm rounded-full ${
-                        location.pathname === "/saved" ? "bg-orange-400" : ""
-                      }`}
-                    >
-                      Saved
-                    </Link>
-                    <Link
-                      to="/settings"
-                      className={`border-[1px] border-gray-400 px-4 py-1 text-sm rounded-full ${
-                        location.pathname === "/settings" ? "bg-orange-400" : ""
-                      }`}
-                    >
-                      Settings
-                    </Link>
-                  </div>
+            )}
+          </div>
+          <div className="flex justify-between w-full space-x-4 h-[70%]">
+            <div className="flex flex-col space-y-8 shadow-md shadow-slate-600 rounded-md border-[1px] border-gray-700 h-full w-1/2 p-4">
+              <div className="flex justify-between w-full">
+                <span className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md">
+                  Basic Information
+                </span>
+                <button
+                  onClick={() => {
+                    if (!editUser) {
+                      setEditUser(true);
+                    } else {
+                      setEditUser(false);
+                    }
+                  }}
+                  className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md hover:text-white duration-200"
+                >
+                  <FaEdit size={20} />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-8 h-fit w-full text-slate-500">
+                <div className="w-full">
+                  {!editUser ? (
+                    <div className="w-full py-2 px-2 rounded-md border-[1px] border-slate-700">
+                      {loggedUserData?.user?.jobTitle
+                        ? `${loggedUserData.user.jobTitle
+                            .charAt(0)
+                            .toUpperCase()}${loggedUserData.user.jobTitle.slice(
+                            1
+                          )}`
+                        : "Not mentioned"}
+                    </div>
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder="Job Title"
+                      name="jobTitle"
+                      required
+                      onChange={onChange}
+                      value={updateUserData.jobTitle}
+                      className="bg-inherit w-full focus:outline-none py-2 px-2 focus:placeholder:text-white focus:border-white border-b-[1px] border-slate-600 placeholder:text-slate-500"
+                    />
+                  )}
                 </div>
-                {/* 2nd part w-full */}
-                <div className="flex space-x-4 justify-between w-full h-[60vh]">
-                  <div className="border-[1px] w-[20%] border-gray-500 rounded bg-gray-100"></div>
-                  <div className="border-[1px] w-[80%] border-gray-500 rounded bg-gray-100"></div>
+                <div className="w-full">
+                  {!editUser ? (
+                    <div className="w-full py-2 px-2 rounded-md border-[1px] border-slate-700">
+                      {loggedUserData?.user?.name
+                        ? `${loggedUserData.user.name}`
+                        : "Not mentioned"}
+                    </div>
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder="Name"
+                      name="name"
+                      required
+                      onChange={onChange}
+                      value={updateUserData.name}
+                      className="bg-inherit w-full focus:outline-none py-2 px-2 focus:placeholder:text-white focus:border-white border-b-[1px] border-slate-600  placeholder:text-slate-500"
+                    />
+                  )}
+                </div>
+                <div className="w-full">
+                  {!editUser ? (
+                    <div className="w-full py-2 px-2 rounded-md border-[1px] border-slate-700">
+                      {loggedUserData?.user?.email
+                        ? `${loggedUserData.user.email}`
+                        : "Not mentioned"}
+                    </div>
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder="Email"
+                      name="email"
+                      required
+                      onChange={onChange}
+                      value={updateUserData.email}
+                      className="bg-inherit w-full focus:outline-none py-2 px-2 focus:placeholder:text-white focus:border-white border-b-[1px] border-slate-600  placeholder:text-slate-500"
+                    />
+                  )}
+                </div>
+                <div className="w-full">
+                  {!editUser ? (
+                    <div className="w-full py-2 px-2 rounded-md border-[1px] border-slate-700">
+                      {loggedUserData?.user?.address
+                        ? `${loggedUserData.user.address}`
+                        : "Not mentioned"}
+                    </div>
+                  ) : (
+                    <input
+                      type="text"
+                      placeholder="Address"
+                      name="address"
+                      required
+                      value={updateUserData.address}
+                      onChange={onChange}
+                      className="bg-inherit w-full focus:outline-none py-2 px-2 focus:placeholder:text-white focus:border-white border-b-[1px] border-slate-600  placeholder:text-slate-500"
+                    />
+                  )}
                 </div>
               </div>
+              {editUser && (
+                <div className="flex justify-end w-full space-x-4 h-fit rounded-md">
+                  <button
+                    onClick={() => {
+                      if (!editUser) {
+                        setEditUser(true);
+                      } else {
+                        setEditUser(false);
+                      }
+                    }}
+                    className="flex w-fit px-4 py-2 hover:text-white duration-200 border-[1px] border-slate-700 h-fit rounded-md"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={handleUpdateInfo}
+                    className="flex w-fit px-4 py-2 hover:text-white duration-200 border-[1px] border-slate-700 h-fit rounded-md"
+                  >
+                    Update
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="shadow-md shadow-slate-600 rounded-md border-[1px] border-gray-700 h-full w-1/2 p-4">
+              <span className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md">
+                User Activity
+              </span>
             </div>
           </div>
         </div>
