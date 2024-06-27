@@ -1,7 +1,7 @@
 /* For Chrome, Safari, and newer versions of Edge */
 ::-webkit-scrollbar {
-  width: 6px; /* Width of the scrollbar */
-  border-radius: 8px; /* Border radius for the main scrollbar */
+  width: 0px; /* Width of the scrollbar */
+  display: hidden;
 }
 
 /* Track */

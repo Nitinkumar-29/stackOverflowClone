@@ -8,6 +8,7 @@ export const AuthProvider = (props) => {
   const token = localStorage.getItem("token");
   const [usersData, setUsersData] = useState([]);
   const [loggedUserData, setLoggedUserData] = useState([]);
+  const [otherUsersProfileData, setOtherUsersProfileData] = useState([]);
   // const host = "http://localhost:8000";
   const host = "https://techaid-backend.vercel.app"
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ export const AuthProvider = (props) => {
         const data = await response.json();
         console.log(data);
         localStorage.setItem("token", data.authToken);
+        setCredentials({ email: "", password: "" });
         navigate("/questions");
         toast.success("Logged in successfully!", {
           style: {
@@ -80,6 +82,23 @@ export const AuthProvider = (props) => {
     }
   };
 
+  // other usesr profile
+  const handleOtherGetUsersProfile = async (id) => {
+    const response = await fetch(`${host}/api/auth/users/profile/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      console.log(response);
+    }
+    const data = await response.json();
+    toast.success("fetched");
+    console.log(data);
+    setOtherUsersProfileData(data);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -93,6 +112,8 @@ export const AuthProvider = (props) => {
         loggedUserData,
         fetchAllUsers,
         navigate,
+        handleOtherGetUsersProfile,
+        otherUsersProfileData,
       }}
     >
       {props.children}

@@ -87,7 +87,7 @@ const ParticularQuestion = () => {
           <div className="flex flex-col md:flex-row w-full justify-start items-center">
             <span className="text-gray-400">asked by &nbsp; </span>
             <Link
-              to={`/userProfile/${particularQuestionData.user}`}
+              to={`/users/profile/${particularQuestionData.user}`}
               className="text-blue-500 font-medium text-base"
             >
               {particularQuestionData?.userName} &nbsp;

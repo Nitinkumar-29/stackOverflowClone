@@ -13,7 +13,7 @@ app.use(
   cors({
     origin: [
       "https://techaid.vercel.app",
-      "http://localhost:3000",
+      // "http://localhost:3000",
     ],
     methods: ["POST", "GET", "DELETE", "PUT"],
   })

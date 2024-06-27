@@ -5,11 +5,11 @@ import { FaBell, FaUser } from "react-icons/fa";
 import AuthContext from "../Context/Authentication/AuthContext";
 
 const Navbar = () => {
-  const { token, loggedUserData, imageHost } = useContext(AuthContext);
+  const { token, loggedUserData, host } = useContext(AuthContext);
 
   return (
     <>
-      <div className="z-10 sticky top-0 w-full bg-slate-950 text-white flex justify-center border-b-[1px] border-b-gray-300 py-3">
+      <div className="z-10 sticky top-0 w-full bg-slate-950 text-slate-500 flex justify-center border-b-[1px] border-b-gray-700 py-3">
         <div className="flex justify-between w-[90%] items-center h-12">
           {/* navbar icon and hamburger */}
           <div className="flex h-full items-center space-x-6">
@@ -47,7 +47,7 @@ const Navbar = () => {
                   {loggedUserData?.user?.profileImage?.data ? (
                     <img
                       className="h-10 w-10 rounded-full"
-                      src={`${imageHost}/${loggedUserData?.user?.profileImage?.data}`}
+                      src={`${host}/${loggedUserData?.user?.profileImage?.data}`}
                       alt=""
                     />
                   ) : (

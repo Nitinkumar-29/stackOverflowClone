@@ -174,7 +174,7 @@ const AskQuestion = () => {
               {/* button to post question */}
               <button
                 type="submit"
-                className="px-4 text-white py-2 text-sm md:text-lg bg-sky-600 hover:bg-sky-700 focus:bg-sky-700 rounded border-sky-900"
+                className="w-fit mx-auto text-lg hover:text-slate-200 px-4 py-2 rounded-md border-[1px] border-slate-700"
               >
                 Post your question
               </button>

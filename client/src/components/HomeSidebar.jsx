@@ -7,7 +7,7 @@ const HomeSidebar = ({ dropdown, share, teams, hamburgerMenuDisplay }) => {
 
   return (
     <>
-      <div className="flex flex-col min-h-full items-start py-4 w-full space-y-2">
+      <div className="flex flex-col min-h-full items-start py-4 w-full space-y-2 text-slate-500">
         <div className="text-sm flex flex-col items-start w-full space-y-1">
           <Link
             to="/questions"

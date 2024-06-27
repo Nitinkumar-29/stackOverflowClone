@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import AuthContext from "../Context/Authentication/AuthContext";
 
 const UserProfile = () => {
-  const { token, host, imageHost, handleGetUser, loggedUserData } =
+  const { token, host, handleGetUser, loggedUserData } =
     useContext(AuthContext);
   const navigate = useNavigate();
   const ref = useRef();
@@ -75,6 +75,7 @@ const UserProfile = () => {
         setFile(null);
         await handleGetUser();
       } else {
+        setImagePreview(null);
         toast.error("Some technical issue occured", {
           style: {
             color: "black",
@@ -220,8 +221,8 @@ const UserProfile = () => {
 
   return (
     <>
-      <div className="flex justify-center w-full bg-slate-950 max-h-screen h-[89.15vh] text-gray-400">
-        <div className="lg:w-[90%] h-full py-8 space-y-5">
+      <div className="flex justify-center w-full bg-slate-950 max-h-screen h-[90.7vh] text-gray-400">
+        <div className="flex flex-col justify-center lg:w-[90%] h-full space-y-5">
           <div className="flex shadow-md shadow-slate-600 border-[1px] border-slate-700 rounded-md h-[30%] w-full">
             {/* user image */}
             <div className="flex items-center h-full w-[25%] p-4">
@@ -260,13 +261,13 @@ const UserProfile = () => {
                 </div>
               )}
               {loggedUserData?.user?.profileImage?.data && (
-                <div className="relative h-fit rounded-full shadow-md shadow-gray-200 border-2">
+                <div className="relative h-fit rounded-full shadow-md shadow-slate-500 border-2">
                   <img
                     className="w-[120px] h-[120px] rounded-full"
-                    src={`${imageHost}/${loggedUserData?.user?.profileImage?.data}`}
-                    alt=""
+                    src={`${host}/${loggedUserData?.user?.profileImage?.data}`}
+                    alt="try reloading"
                   />
-                  <span className="cursor-pointer absolute top-[72%] right-[5%]  p-1 rounded-full bg-slate-200">
+                  <span className="cursor-pointer absolute top-[72%] right-[5%]  p-1 rounded-full bg-slate-400">
                     <AiFillDelete
                       color="black"
                       size={20}
@@ -278,7 +279,7 @@ const UserProfile = () => {
             </div>
             {loggedUserData?.user && (
               <div className="flex justify-between items-end pb-5 w-[75%]">
-                <div className="flex flex-col space-y-2 text-gray-200">
+                <div className="flex flex-col space-y-2 text-gray-300">
                   <span className="text-5xl font-semibold">
                     {loggedUserData.user.name}
                   </span>
@@ -308,7 +309,7 @@ const UserProfile = () => {
               </div>
             )}
           </div>
-          <div className="flex justify-between w-full space-x-4 h-[70%]">
+          <div className="flex justify-between w-full space-x-4 h-[60%]">
             <div className="flex flex-col space-y-8 shadow-md shadow-slate-600 rounded-md border-[1px] border-gray-700 h-full w-1/2 p-4">
               <div className="flex justify-between w-full">
                 <span className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md">

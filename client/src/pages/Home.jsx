@@ -10,12 +10,12 @@ const Home = () => {
     navigate(key);
   };
   return (
-    <div className="flex justify-center bg-slate-950 text-white mx-auto h-[89.15vh] w-full">
-      <div className="flex w-[90%] space-x-12">
-        <div className="w-[16%] h-full border-r-2">
+    <div className="flex justify-center bg-slate-950 text-slate-500 mx-auto h-[90.7vh] w-full">
+      <div className="flex w-[90%] space-x-6">
+        <div className="w-[12%] h-full border-r-[1px] border-slate-500">
           <HomeSidebar onLinkClick={handleLinkClick}></HomeSidebar>
         </div>
-        <div className="w-[84%] h-full">
+        <div className="w-[86%] h-full">
           <Outlet />
         </div>
       </div>

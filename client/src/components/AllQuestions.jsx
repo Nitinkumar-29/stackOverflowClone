@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Link, useNavigate, } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./hideScrollbar.css";
 import toast from "react-hot-toast";
 import { formatTime } from "../Utils/utils";
@@ -28,34 +28,37 @@ const AllQuestions = () => {
   }, []);
 
   return (
-    <div className="flex justify-between md:w-screen md:ml-5 lg:mx-0 lg:w-full h-full hideScrollbar overflow-y-auto pt-5">
+    <div className="flex justify-between md:w-screen md:ml-5 lg:mx-0 lg:w-full h-full hideScrollbar overflow-y-scroll pt-5 text-slate-500">
       <div className="flex flex-col items-start w-full space-y-6">
         <div className="flex flex-col space-y-4 w-full">
           <div className="flex justify-between w-full items-center">
             <div className="text-xl md:text-3xl">All Questions</div>
             <button
               onClick={handleNavigateAskQuestion}
-              className="border-2 border-gray-500 text-xs md:text-sm px-2 py-2 rounded text-center text-white"
+              className="w-fit text-lg hover:text-slate-200 px-4 py-2 rounded-md border-[1px] border-slate-700"
             >
               Ask Question
             </button>
           </div>
-          <div className="text-xs md:text-sm font-medium py-1 px-2 text-white border-slate-500 rounded  border-2 w-fit">
+          <div className="w-fit text-lg hover:text-slate-200 px-4 py-2 rounded-md border-[1px] border-slate-700">
             No. of Question:{" "}
             <span className="font-normal">{questionsData.length}</span>
           </div>
         </div>
         {/* all question section */}
-        <div className="flex flex-col items-start border-t-[1px] border-blue-100 space-y-2 w-full">
+        <div className="flex flex-col items-start space-y-5 rounded-md w-full">
           {questionsData.sort()?.map((question) => {
             return (
-              <div className="w-full" key={question._id}>
-                <div className="border-b-[0px] border-blue-100 flex flex-col space-y-2 py-3 w-full">
+              <div
+                className="w-full h-full rounded-md border-[1px] border-slate-500 shadow-md hover:shadow-slate-500"
+                key={question._id}
+              >
+                <div className="flex flex-col space-y-3 p-3 w-full">
                   <div className="flex flex-col space-y-1 items-start">
                     <Link
                       onClick={() => console.log(question._id)}
                       to={`/questions/${question._id}`}
-                      className="text-sm md:text-base font-medium text-blue-500"
+                      className="text-sm md:text-base font-medium text-slate-300"
                     >
                       {question.QuestionTitle}
                     </Link>
@@ -66,11 +69,11 @@ const AllQuestions = () => {
                     </p>
                   </div>
                   <div className="flex flex-col md:flex-row justify-between space-y-2 md:space-x-2">
-                    <div className="space-x-2">
+                    <div className="space-x-3">
                       {question.QuestionTags.map((tag, index) => {
                         return (
                           <span
-                            className="text-xs md:text-sm bg-blue-100 px-2 text-blue-500 py-1 rounded"
+                            className="text-xs md:text-sm border-[1px] border-slate-700 px-2 text-slate-500 py-1 rounded"
                             key={tag[index]}
                           >
                             {tag}
@@ -92,7 +95,6 @@ const AllQuestions = () => {
                     )}
                   </div>
                 </div>
-                <hr className=""></hr>
               </div>
             );
           })}

@@ -14,6 +14,7 @@ import Welcome from "./pages/Welcome";
 import SavedQuestion from "./components/SavedQuestion";
 import { QuestionProvider, } from "./Context/questions/QuestionContext";
 import { AuthProvider } from "./Context/Authentication/AuthContext";
+import OtherUsersProfile from "./components/OtherUsersProfile";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route exact index element={<Welcome />} />
             <Route path="/" element={<Home />}>
               <Route path="/users" element={<AllUsers />} />
+              <Route path="/users/profile/:id" element={<OtherUsersProfile/>}/>
               <Route path="/questions" element={<AllQuestions />} />
               <Route path="/tags" element={<Tags />} />
               <Route path="/questions/:id" element={<ParticularQuestion />} />
@@ -44,8 +46,6 @@ function App() {
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/userProfile" element={<UserProfile />} />
             <Route exact path="/userProfile/:id" element={<UserProfile />} />
-
-            {/* <Route exact path="/users" element={<AllUsers />} /> */}
           </Routes>
         </QuestionProvider>
       </AuthProvider>
