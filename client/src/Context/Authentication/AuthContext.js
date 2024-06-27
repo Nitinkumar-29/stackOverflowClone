@@ -8,10 +8,10 @@ export const AuthProvider = (props) => {
   const token = localStorage.getItem("token");
   const [usersData, setUsersData] = useState([]);
   const [loggedUserData, setLoggedUserData] = useState([]);
-  const host = "http://localhost:8000";
-  // const host = "https://techaid-backend.vercel.app"
-  const imageHost = "http://localhost:8000";
-  // const imageHost = "https://techaid-backend.vercel.app"
+  // const host = "http://localhost:8000";
+  const host = "https://techaid-backend.vercel.app"
+  // const imageHost = "http://localhost:8000";
+  const imageHost = "https://techaid-backend.vercel.app"
   const navigate = useNavigate();
 
   const login = async () => {
