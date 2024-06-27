@@ -10,8 +10,6 @@ export const AuthProvider = (props) => {
   const [loggedUserData, setLoggedUserData] = useState([]);
   // const host = "http://localhost:8000";
   const host = "https://techaid-backend.vercel.app"
-  // const imageHost = "http://localhost:8000";
-  const imageHost = "https://techaid-backend.vercel.app"
   const navigate = useNavigate();
 
   const login = async () => {
@@ -94,7 +92,6 @@ export const AuthProvider = (props) => {
         usersData,
         loggedUserData,
         fetchAllUsers,
-        imageHost,
         navigate,
       }}
     >
