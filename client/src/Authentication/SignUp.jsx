@@ -15,7 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 const SignUp = () => {
   const navigate = useNavigate();
   // const host = "http://localhost:8000";
-  const host = "https://techaid.vercel.app";
+  const host = "https://techaid-backend.vercel.app";
   const [passwordType, setPasswordType] = useState("password");
   const [credentials, setCredentials] = useState({
     name: "",
