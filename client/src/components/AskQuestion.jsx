@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import QuestionContext from "../Context/questions/QuestionContext";
 
 const AskQuestion = () => {
   const [writeQuestion, setWriteQuestion] = useState({
     QuestionTitle: "",
     QuestionDetails: "",
-  QuestionTags: [],
+    QuestionTags: [],
   });
-  // const host = "http://localhost:8000";
-  const host = "https://techaid-backend.vercel.app"
+
+  const { host } = useContext(QuestionContext);
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
