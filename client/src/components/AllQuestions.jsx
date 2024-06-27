@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from "react";
 import { Link, useNavigate, } from "react-router-dom";
 import "./hideScrollbar.css";
-import { QuestionContext } from "../Context/questions/QuestionContext";
 import toast from "react-hot-toast";
 import { formatTime } from "../Utils/utils";
+import QuestionContext from "../Context/questions/QuestionContext";
 
 const AllQuestions = () => {
   const navigate = useNavigate();

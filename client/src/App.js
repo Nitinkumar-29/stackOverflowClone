@@ -12,14 +12,14 @@ import UserProfile from "./pages/UserProfile";
 import AllUsers from "./components/AllUsers";
 import Welcome from "./pages/Welcome";
 import SavedQuestion from "./components/SavedQuestion";
-import { QuestionState } from "./Context/questions/QuestionContext";
+import { QuestionProvider, } from "./Context/questions/QuestionContext";
 import { AuthProvider } from "./Context/Authentication/AuthContext";
 
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <QuestionState>
+        <QuestionProvider>
           <Toaster
             position="top-center"
             toastOptions={{ duration: 1000 }}
@@ -47,7 +47,7 @@ function App() {
 
             {/* <Route exact path="/users" element={<AllUsers />} /> */}
           </Routes>
-        </QuestionState>
+        </QuestionProvider>
       </AuthProvider>
     </Router>
   );

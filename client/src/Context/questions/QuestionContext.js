@@ -1,8 +1,8 @@
 import { createContext, useState } from "react";
 import toast from "react-hot-toast";
-export const QuestionContext = createContext();
+const QuestionContext = createContext();
 
-export const QuestionState = ({ children }) => {
+export const QuestionProvider = ({ children }) => {
   const [questionsData, setQuestionsData] = useState([]);
   const [particularQuestionData, setParticularQuestionData] = useState([]);
   const token = localStorage.getItem("token");
@@ -232,3 +232,5 @@ export const QuestionState = ({ children }) => {
     </>
   );
 };
+
+export default QuestionContext;

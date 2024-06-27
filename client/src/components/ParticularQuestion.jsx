@@ -3,8 +3,8 @@ import toast from "react-hot-toast";
 import { Link, useParams } from "react-router-dom";
 import "./hideScrollbar.css";
 import { BiCopy, BiSolidDownvote, BiSolidUpvote } from "react-icons/bi";
-import { QuestionContext } from "../Context/questions/QuestionContext";
 import { formatTime } from "../Utils/utils";
+import QuestionContext from "../Context/questions/QuestionContext";
 
 const ParticularQuestion = () => {
   const {
