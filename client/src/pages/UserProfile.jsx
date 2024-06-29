@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaCamera, FaEdit } from "react-icons/fa";
+import { FaCamera, FaEdit, FaMoon, FaSun } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import toast from "react-hot-toast";
 import AuthContext from "../Context/Authentication/AuthContext";
+import ThemeContext from "../Context/Theme/ThemeContext";
 
 const UserProfile = () => {
   const { token, host, handleGetUser, loggedUserData } =
     useContext(AuthContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const navigate = useNavigate();
   const ref = useRef();
   const [editUser, setEditUser] = useState(false);
@@ -221,11 +223,18 @@ const UserProfile = () => {
 
   return (
     <>
-      <div className="flex justify-center w-full bg-slate-950 max-h-screen h-[90.7vh] text-gray-400">
-        <div className="flex flex-col justify-center lg:w-[90%] h-full space-y-5">
-          <div className="flex shadow-md shadow-slate-600 border-[1px] border-slate-700 rounded-md h-[30%] w-full">
+      <div
+        // style={{ height: "calc(100vh - 74px)" }}
+        className={`flex justify-center w-full ${
+          theme === "dark"
+            ? " bg-slate-950 text-slate-500"
+            : "bg-gradient-to-bl from-red-100 via-violet-200 to-green-100 text-black min-h-screen"
+        } `}
+      >
+        <div className="flex flex-col justify-center w-full lg:w-[90%] h-full space-y-5 p-5">
+          <div className="flex flex-col items-center md:flex-row shadow-md shadow-slate-600 border-[1px] border-slate-700 rounded-md lg:h-[30%] w-full">
             {/* user image */}
-            <div className="flex items-center h-full w-[25%] p-4">
+            <div className="flex items-center h-fit  lg:h-full  lg:w-[25%] p-4">
               {!loggedUserData?.user?.profileImage?.data && (
                 <div className="w-fit space-y-3 p-2">
                   {!imagePreview && (
@@ -241,7 +250,7 @@ const UserProfile = () => {
                   {!imagePreview && (
                     <span
                       onClick={handleSelectFile}
-                      className="cursor-pointer w-[120px] rounded-full h-[120px] border-2 border-gray-800 flex items-center justify-center"
+                      className="cursor-pointer w-[80px] lg:w-[120px] rounded-full h-[80px] lg:h-[120px] border-2 border-gray-800 flex items-center justify-center"
                     >
                       <FaCamera />
                     </span>
@@ -261,9 +270,9 @@ const UserProfile = () => {
                 </div>
               )}
               {loggedUserData?.user?.profileImage?.data && (
-                <div className="relative h-fit rounded-full shadow-md shadow-slate-500 border-2">
+                <div className="relative h-fit w-fit rounded-full shadow-md shadow-slate-500 border-2">
                   <img
-                    className="w-[120px] h-[120px] rounded-full"
+                    className="w-[80px] h-[80px] lg:w-[120px] lg:h-[120px] rounded-full"
                     src={`${host}/${loggedUserData?.user?.profileImage?.data}`}
                     alt="try reloading"
                   />
@@ -278,17 +287,23 @@ const UserProfile = () => {
               )}
             </div>
             {loggedUserData?.user && (
-              <div className="flex justify-between items-end pb-5 w-[75%]">
-                <div className="flex flex-col space-y-2 text-gray-300">
-                  <span className="text-5xl font-semibold">
+              <div className="flex flex-col space-y-5 lg:space-y-0 lg:flex-row justify-between items-end pb-5 md:w-[75%]">
+                <div
+                  className={`flex flex-col md:space-y-2 ${
+                    theme === "dark" ? "text-slate-300" : "text-red-600"
+                  }`}
+                >
+                  <span className="lg:text-5xl font-semibold">
                     {loggedUserData.user.name}
                   </span>
-                  <span className="text-xl">{loggedUserData.user.email}</span>
+                  <span className="lg:text-xl">
+                    {loggedUserData.user.email}
+                  </span>
                 </div>
-                <div className="flex space-x-4 px-4">
+                <div className="flex flex-col space-y-2 lg:space-x-4 px-4 w-full">
                   <button
                     onClick={handleDeleteUser}
-                    className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md"
+                    className="flex items-center w-full lg:w-fit p-2 border-[1px] border-slate-700 h-fit rounded-md"
                   >
                     <AiFillDelete className="mt-[2.5px] mx-2"></AiFillDelete>
                     Delete Account
@@ -300,7 +315,7 @@ const UserProfile = () => {
                         navigate("/welcome");
                       }
                     }}
-                    className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md"
+                    className="flex items-center w-full lg:w-fit p-2 border-[1px] border-slate-700 h-fit rounded-md"
                   >
                     <AiFillDelete className="mt-[2.5px] mx-2"></AiFillDelete>
                     LogOut
@@ -309,8 +324,8 @@ const UserProfile = () => {
               </div>
             )}
           </div>
-          <div className="flex justify-between w-full space-x-4 h-[60%]">
-            <div className="flex flex-col space-y-8 shadow-md shadow-slate-600 rounded-md border-[1px] border-gray-700 h-full w-1/2 p-4">
+          <div className="flex flex-col md:flex-row justify-between w-full space-y-4 lg:space-y-0 lg:space-x-4 md:h-[60%]">
+            <div className="flex flex-col space-y-8 shadow-md shadow-slate-600 rounded-md border-[1px] border-gray-700 h-full lg:w-1/2 p-4">
               <div className="flex justify-between w-full">
                 <span className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md">
                   Basic Information
@@ -323,12 +338,14 @@ const UserProfile = () => {
                       setEditUser(false);
                     }
                   }}
-                  className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md hover:text-white duration-200"
+                  className={`flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md hover:${
+                    theme === "dark" ? "text-white" : "text-red-600"
+                  } duration-200`}
                 >
                   <FaEdit size={20} />
                 </button>
               </div>
-              <div className="grid grid-cols-2 gap-8 h-fit w-full text-slate-500">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-fit w-full">
                 <div className="w-full">
                   {!editUser ? (
                     <div className="w-full py-2 px-2 rounded-md border-[1px] border-slate-700">
@@ -348,7 +365,11 @@ const UserProfile = () => {
                       required
                       onChange={onChange}
                       value={updateUserData.jobTitle}
-                      className="bg-inherit w-full focus:outline-none py-2 px-2 focus:placeholder:text-white focus:border-white border-b-[1px] border-slate-600 placeholder:text-slate-500"
+                      className={`bg-inherit w-full focus:outline-none py-2 px-2  focus:border-white border-b-[1px] border-slate-600 ${
+                        theme === "dark"
+                          ? "placeholder:text-slate-500"
+                          : "placeholder:text-red-700"
+                      }`}
                     />
                   )}
                 </div>
@@ -367,7 +388,11 @@ const UserProfile = () => {
                       required
                       onChange={onChange}
                       value={updateUserData.name}
-                      className="bg-inherit w-full focus:outline-none py-2 px-2 focus:placeholder:text-white focus:border-white border-b-[1px] border-slate-600  placeholder:text-slate-500"
+                      className={`bg-inherit w-full focus:outline-none py-2 px-2 focus:border-white border-b-[1px] border-slate-600 ${
+                        theme === "dark"
+                          ? "placeholder:text-slate-500"
+                          : "placeholder:text-red-700"
+                      }`}
                     />
                   )}
                 </div>
@@ -386,7 +411,11 @@ const UserProfile = () => {
                       required
                       onChange={onChange}
                       value={updateUserData.email}
-                      className="bg-inherit w-full focus:outline-none py-2 px-2 focus:placeholder:text-white focus:border-white border-b-[1px] border-slate-600  placeholder:text-slate-500"
+                      className={`bg-inherit w-full focus:outline-none py-2 px-2 focus:border-white border-b-[1px] border-slate-600 ${
+                        theme === "dark"
+                          ? "placeholder:text-slate-500"
+                          : "placeholder:text-red-700"
+                      }`}
                     />
                   )}
                 </div>
@@ -405,7 +434,11 @@ const UserProfile = () => {
                       required
                       value={updateUserData.address}
                       onChange={onChange}
-                      className="bg-inherit w-full focus:outline-none py-2 px-2 focus:placeholder:text-white focus:border-white border-b-[1px] border-slate-600  placeholder:text-slate-500"
+                      className={`bg-inherit w-full focus:outline-none py-2 px-2 focus:placeholder:text-white focus:border-white border-b-[1px] border-slate-600 ${
+                        theme === "dark"
+                          ? "placeholder:text-slate-500"
+                          : "placeholder:text-red-700"
+                      }`}
                     />
                   )}
                 </div>
@@ -433,7 +466,7 @@ const UserProfile = () => {
                 </div>
               )}
             </div>
-            <div className="shadow-md shadow-slate-600 rounded-md border-[1px] border-gray-700 h-full w-1/2 p-4">
+            <div className="shadow-md shadow-slate-600 rounded-md border-[1px] border-gray-700 h-full lg:w-1/2 p-4">
               <span className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md">
                 User Activity
               </span>

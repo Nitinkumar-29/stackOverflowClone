@@ -2,13 +2,14 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import QuestionContext from "../Context/questions/QuestionContext";
-
+import ThemeContext from "../Context/Theme/ThemeContext";
 const AskQuestion = () => {
   const [writeQuestion, setWriteQuestion] = useState({
     QuestionTitle: "",
     QuestionDetails: "",
     QuestionTags: [],
   });
+  const { theme } = useContext(ThemeContext);
 
   const { host } = useContext(QuestionContext);
 
@@ -56,14 +57,20 @@ const AskQuestion = () => {
   };
   return (
     <>
-      <div className="flex justify-center w-full h-full bg-slate-950 text-gray-400">
+      <div
+        className={`flex justify-center w-full h-full ${
+          theme === "dark"
+            ? " bg-slate-950 text-slate-500"
+            : "bg-gradient-to-bl from-red-100 via-violet-200 to-green-100 text-black"
+        }`}
+      >
         <div className="flex flex-col mx-auto justify-center items-center space-y-10 h-full m-8 w-[90%]">
           <span className="font-bold text-2xl lg:text-3xl w-fit mx-auto">
             Ask a public question
           </span>
           <div className="flex flex-col items-start h-full w-full space-y-10">
             {/* instruction to write a good question */}
-            <div className="text-sm bg-blue-50 border-[1px] mx-auto rounded-md border-sky-600 lg:h-[35vh] md:w-[70%] p-5 space-y-2">
+            <div className="text-sm bg-inherit border-[1px] mx-auto rounded-md border-slate-700 lg:h-[35vh] md:w-[70%] p-5 space-y-2">
               <span className="text-xl">Writing a good question</span>
               <div className="space-y-2">
                 <div className="flex flex-col">
@@ -108,7 +115,7 @@ const AskQuestion = () => {
               className="md:w-[70%] mx-auto py-5 space-y-6"
             >
               {/* question title */}
-              <div className="rounded border-[1px] border-gray-300 p-5 flex flex-col w-full items-start space-y-1">
+              <div className="rounded border-[1px] border-slate-700 p-5 flex flex-col w-full items-start space-y-1">
                 <label className="font-semibold" htmlFor="title">
                   Title
                 </label>
@@ -117,7 +124,7 @@ const AskQuestion = () => {
                   person
                 </p>
                 <input
-                  className="text-sm text-black focus:outline-none border-gray-400 border-[1px] w-full px-2 py-1 rounded"
+                  className="text-sm text-black focus:outline-none border-slate-700 bg-inherit border-[1px] w-full px-2 py-1 rounded"
                   onChange={onChange}
                   value={writeQuestion.QuestionTitle}
                   name="QuestionTitle"
@@ -127,7 +134,7 @@ const AskQuestion = () => {
                 />
               </div>
               {/* question in detail */}
-              <div className="rounded border-[1px] border-gray-300 p-5 flex flex-col w-full items-start space-y-1">
+              <div className="rounded border-[1px] border-slate-700 p-5 flex flex-col w-full items-start space-y-1">
                 <label className="font-semibold" htmlFor="body">
                   Body
                 </label>
@@ -135,7 +142,7 @@ const AskQuestion = () => {
                   The body of your question contains your problem detail.
                 </p>
                 <textarea
-                  className="flex flex-col text-black text-sm focus:outline-none border-gray-400 border-[1px] w-full px-2 py-1 rounded"
+                  className="flex flex-col text-black text-sm focus:outline-none border-slate-700 bg-inherit border-[1px] w-full px-2 py-1 rounded"
                   type="text"
                   onChange={onChange}
                   value={writeQuestion.QuestionDetails}
@@ -146,7 +153,7 @@ const AskQuestion = () => {
                 />
               </div>
               {/* all question tags */}
-              <div className="rounded border-[1px] border-gray-300 p-5 flex flex-col w-full items-start space-y-1">
+              <div className="rounded border-[1px] border-slate-700 p-5 flex flex-col w-full items-start space-y-1">
                 <label className="font-semibold" htmlFor="tags">
                   Tags
                 </label>
@@ -155,7 +162,7 @@ const AskQuestion = () => {
                   write member of community.
                 </p>
                 <input
-                  className="text-sm text-black focus:outline-none border-gray-400 border-[1px] w-full px-2 py-1 rounded"
+                  className="text-sm text-black focus:outline-none bg-inherit border-slate-700 border-[1px] w-full px-2 py-1 rounded"
                   type="text"
                   onChange={(e) =>
                     setWriteQuestion({
@@ -174,7 +181,7 @@ const AskQuestion = () => {
               {/* button to post question */}
               <button
                 type="submit"
-                className="w-fit mx-auto text-lg hover:text-slate-200 px-4 py-2 rounded-md border-[1px] border-slate-700"
+                className="w-full lg:w-fit mx-auto text-lg px-4 py-2 rounded-md border-[1px] border-slate-700"
               >
                 Post your question
               </button>

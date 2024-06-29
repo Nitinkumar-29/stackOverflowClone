@@ -4,8 +4,11 @@ import "./hideScrollbar.css";
 import toast from "react-hot-toast";
 import { formatTime } from "../Utils/utils";
 import QuestionContext from "../Context/questions/QuestionContext";
+import ThemeContext from "../Context/Theme/ThemeContext";
+import { TbPencilQuestion } from "react-icons/tb";
 
 const AllQuestions = () => {
+  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
   const { fetchAllQuestions, questionsData, token } =
     useContext(QuestionContext);
@@ -28,25 +31,24 @@ const AllQuestions = () => {
   }, []);
 
   return (
-    <div className="flex justify-between md:w-screen md:ml-5 lg:mx-0 lg:w-full h-full hideScrollbar overflow-y-scroll pt-5 text-slate-500">
-      <div className="flex flex-col items-start w-full space-y-6">
-        <div className="flex flex-col space-y-4 w-full">
-          <div className="flex justify-between w-full items-center">
-            <div className="text-xl md:text-3xl">All Questions</div>
-            <button
-              onClick={handleNavigateAskQuestion}
-              className="w-fit text-lg hover:text-slate-200 px-4 py-2 rounded-md border-[1px] border-slate-700"
-            >
-              Ask Question
-            </button>
+    <div className="flex justify-between md:w-screen md:ml-5 lg:mx-0 lg:w-full h-full  p-3">
+      <div className="flex flex-col items-start w-full space-y-2">
+        <div className="flex justify-between w-full items-center">
+          <div className="flex items-center md:text-3xl">
+            Questions: {questionsData.length}
           </div>
-          <div className="w-fit text-lg hover:text-slate-200 px-4 py-2 rounded-md border-[1px] border-slate-700">
-            No. of Question:{" "}
-            <span className="font-normal">{questionsData.length}</span>
-          </div>
+          <button
+            onClick={handleNavigateAskQuestion}
+            className={`w-fit ${
+              theme === "dark" ? "hover:text-slate-200" : "hover:text-black"
+            } px-4 py-2 rounded-md border-[1px] border-slate-700`}
+          >
+            <TbPencilQuestion />
+            <span className="hidden lg:flex"> Ask Question</span>
+          </button>
         </div>
         {/* all question section */}
-        <div className="flex flex-col items-start space-y-5 rounded-md w-full">
+        <div className="flex flex-col items-start space-y-5 rounded-md w-full py-4 hideScrollbar overflow-y-scroll">
           {questionsData.sort()?.map((question) => {
             return (
               <div
@@ -58,7 +60,9 @@ const AllQuestions = () => {
                     <Link
                       onClick={() => console.log(question._id)}
                       to={`/questions/${question._id}`}
-                      className="text-sm md:text-base font-medium text-slate-300"
+                      className={`text-sm md:text-base font-medium ${
+                        theme === "dark" ? "text-slate-300" : "text-red-700"
+                      }`}
                     >
                       {question.QuestionTitle}
                     </Link>
@@ -69,11 +73,11 @@ const AllQuestions = () => {
                     </p>
                   </div>
                   <div className="flex flex-col md:flex-row justify-between space-y-2 md:space-x-2">
-                    <div className="space-x-3">
+                    <div className="flex flex-wrap gap-3">
                       {question.QuestionTags.map((tag, index) => {
                         return (
                           <span
-                            className="text-xs md:text-sm border-[1px] border-slate-700 px-2 text-slate-500 py-1 rounded"
+                            className="text-sm border-[1px] border-slate-700 px-2 text-slate-500 py-1 rounded"
                             key={tag[index]}
                           >
                             {tag}
@@ -84,7 +88,7 @@ const AllQuestions = () => {
                     {question.userName && (
                       <div className="text-sm">
                         <Link
-                          to="/userProfile"
+                          to={`/users/profile/${question.user}`}
                           className="font-medium text-blue-600"
                         >
                           {question?.userName}

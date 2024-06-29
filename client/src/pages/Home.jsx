@@ -1,23 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import HomeSidebar from "../components/HomeSidebar";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import ThemeContext from "../Context/Theme/ThemeContext";
 
 const Home = () => {
-  // const token = localStorage.getItem("token");
-  const navigate = useNavigate();
+  const { theme } = useContext(ThemeContext);
 
-  const handleLinkClick = (key) => {
-    navigate(key);
-  };
   return (
-    <div className="flex justify-center bg-slate-950 text-slate-500 mx-auto h-[90.7vh] w-full">
-      <div className="flex w-[90%] space-x-6">
-        <div className="w-[12%] h-full border-r-[1px] border-slate-500">
-          <HomeSidebar onLinkClick={handleLinkClick}></HomeSidebar>
-        </div>
-        <div className="w-[86%] h-full">
-          <Outlet />
-        </div>
+    <div
+      style={{ height: "calc(100vh - 72px)" }}
+      className={`relative flex flex-col-reverse justify-center ${
+        theme === "dark"
+          ? "bg-slate-950 text-slate-500"
+          : "bg-gradient-to-bl from-red-100 via-violet-200 to-green-100 text-black"
+      } mx-auto w-full`}
+    >
+      <div className="absolute bottom-0 w-full">
+        <HomeSidebar />
+      </div>
+      <div className="h-full w-full pb-10">
+        <Outlet />
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import "./hideScrollbar.css";
 import { BiCopy, BiSolidDownvote, BiSolidUpvote } from "react-icons/bi";
 import { formatTime } from "../Utils/utils";
 import QuestionContext from "../Context/questions/QuestionContext";
+import ThemeContext from "../Context/Theme/ThemeContext";
 
 const ParticularQuestion = () => {
   const {
@@ -21,6 +22,7 @@ const ParticularQuestion = () => {
     voteDown,
   } = useContext(QuestionContext);
   const { id } = useParams();
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     fetchQuestionData(id);
@@ -59,14 +61,18 @@ const ParticularQuestion = () => {
 
   return (
     <div
-      className={`flex justify-between md:w-screen md:ml-5 lg:mx-0 lg:w-full h-[88vh] py-6`}
+      className={`flex justify-between md:w-screen md:ml-5 lg:mx-0 w-[95%] mx-auto h-full lg:w-full py-3`}
     >
-      <div className="flex flex-col w-full pr-4">
+      <div className="flex flex-col w-full hideScrollbar overflow-y-scroll">
         <div className="flex flex-col w-full space-y-3">
-          <div className="flex flex-col-reverse lg:flex-row justify-between items-start h-fit w-full ">
-            <span className="mt-2 lg:mt-0 text-base lg:text-xl md:w-[83%] text-blue-500 font-medium">
+          <div className="flex items-center justify-between space-x-1 w-full">
+            <div
+              className={`mt-2 lg:mt-0 text-base lg:text-xl ${
+                theme === "dark" ? "text-slate-300" : "text-red-600"
+              } font-medium`}
+            >
               {particularQuestionData?.QuestionTitle}
-            </span>
+            </div>
             <span
               className="cursor-pointer text-slate-500 hover:text-white duration-200"
               onClick={() => {
@@ -84,7 +90,7 @@ const ParticularQuestion = () => {
               <BiCopy size={25} />
             </span>
           </div>
-          <div className="flex flex-col md:flex-row w-full justify-start items-center">
+          <div className="flex flex-row flex-wrap w-full justify-start items-center">
             <span className="text-gray-400">asked by &nbsp; </span>
             <Link
               to={`/users/profile/${particularQuestionData.user}`}
@@ -97,10 +103,9 @@ const ParticularQuestion = () => {
             </span>
           </div>
         </div>
-        <hr className="my-2" />
-        <div className="flex justify-between w-full text-gray-500 space-x-4 mb-2">
+        <div className="flex justify-between items-start w-full text-gray-500 space-x-4 my-3">
           {particularQuestionData?.QuestionDetails && (
-            <div className="flex flex-col justify-center items-center space-y-1">
+            <div className="flex flex-col justify-center items-center space-y-1 mt-2">
               <span
                 onClick={handleVoteUp}
                 className={`border-[1px] hover:bg-gray-100  cursor-pointer border-black rounded-full p-2`}
@@ -117,16 +122,16 @@ const ParticularQuestion = () => {
             </div>
           )}
           <div className="flex flex-col space-y-2 h-full w-full">
-            <p className="text-sm lg:text-base">
+            <p className="text-base text-slate-700">
               {particularQuestionData?.QuestionDetails}
             </p>
             {/* tags and other data */}
-            <div className="flex space-x-2">
+            <div className="flex gap-2 flex-wrap">
               {particularQuestionData?.QuestionTags &&
                 particularQuestionData?.QuestionTags.map((tag, index) => {
                   return (
                     <div className="flex" key={index}>
-                      <span className="text-xs bg-blue-100 text-blue-500 px-2 py-1 rounded md:text-sm">
+                      <span className="text-xs bg-inherit border-[1px] border-slate-700 text-slate-500 px-2 py-1 rounded md:text-sm">
                         {tag}
                       </span>
                     </div>
@@ -135,7 +140,6 @@ const ParticularQuestion = () => {
             </div>
           </div>
         </div>
-        <hr className="my-1" />
         {/* question's answers */}
         <div>
           <div className="flex space-x-1 items-center">
@@ -156,21 +160,20 @@ const ParticularQuestion = () => {
               fetchQuestionAnswer.answers.map((answer, index) => {
                 return (
                   <div
-                    className="flex flex-col border-b-[1px] border-gray-100 pb-2 space-y-2"
+                    className="flex flex-col border-b-[1px] border-slate-700 pb-2 space-y-2"
                     key={index}
                   >
-                    <span className="">{answer.answerBody}</span>
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-400">
-                        answered on{" "}
-                        <span className="text-black">
-                          {formatTime(answer.date)}
-                        </span>
-                      </div>
+                    <span className="text-slate-700">{answer.answerBody}</span>
+                    <div className="flex items-center flex-wrap ">
                       <div className="text-sm">
-                        by{" "}
+                        answered by &nbsp;
                         <span className="font-medium text-blue-500">
                           {answer.userName}
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        <span className="text-black">
+                          &nbsp; {formatTime(answer.date)}
                         </span>
                       </div>
                     </div>
@@ -179,19 +182,26 @@ const ParticularQuestion = () => {
               })}
           </div>
         </div>
-        <div className="flex flex-col text-gray-500 space-y-6 mt-4">
+        <div className="flex flex-col space-y-6 mt-4 pb-5">
           <div className="flex flex-col items-start space-y-2 pb-10 w-full">
-            <span className="text-base md:text-lg">Your answer</span>
+            <span className="text-base ">Your answer</span>
             <textarea
-              className="w-full focus:placeholder:outline-none bg-inherit border-[1px] placeholder:text-sm md:placeholder:text-lg border-gray-400 rounded py-2 px-4"
+              className={`w-full focus:outline-none bg-inherit border-[1px] ${
+                theme === "dark"
+                  ? "placeholder:text-slate-500"
+                  : "placeholder:text-black"
+              } placeholder:text-sm md:placeholder:text-lg border-slate-700 rounded p-2`}
               type="text"
               name="answerBody"
               onChange={onChange}
-              value={postQuestionAnswerData.answerBody}
-              placeholder="Write your answer here for above asked question"
+              value={
+                postQuestionAnswerData.answerBody.charAt(0).toUpperCase() +
+                postQuestionAnswerData.answerBody.slice(1)
+              }
+              placeholder="Type Here"
             ></textarea>
             <button
-              className="text-sm md:text-base bg-sky-600 border-sky-700 border-[1px] rounded px-4 py-1 text-white"
+              className="w-fit text-lg px-4 py-2 rounded-md border-[1px] border-slate-700"
               onClick={handlePostQuestionAnswer}
             >
               Post Answer

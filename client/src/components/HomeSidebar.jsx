@@ -1,58 +1,78 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaQuestion, FaSave, FaUsers } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
+import ThemeContext from "../Context/Theme/ThemeContext";
 
-const HomeSidebar = ({ dropdown, share, teams, hamburgerMenuDisplay }) => {
+const HomeSidebar = () => {
   const location = useLocation();
+  const { theme } = useContext(ThemeContext);
 
   return (
     <>
-      <div className="flex flex-col min-h-full items-start py-4 w-full space-y-2 text-slate-500">
-        <div className="text-sm flex flex-col items-start w-full space-y-1">
+      <div
+        className={`flex items-center h-12  w-full justify-around ${
+          theme === "dark"
+            ? " bg-slate-950 text-slate-500"
+            : "bg-gradient-to-bl  from-red-100 via-violet-200 to-green-100 text-black"
+        }`}
+      >
+        <span>
           <Link
             to="/questions"
-            className={`flex space-x-2 items-center h-fit ${
-              location.pathname === "/questions" ? "" : "hover:bg-gray-700"
+            className={`flex items-center space-x-2 ${
+              location.pathname === "/questions"
+                ? ""
+                : `lg:hover:${theme === "dark" ? "bg-gray-700" : "bg-white"}`
             } w-full py-2 px-2 ${
               location.pathname === "/questions"
-                ? "bg-slate-800"
+                ? `lg:${theme === "dark" ? "bg-gray-800" : "bg-white"}`
                 : "bg-transparent"
             } ${
               location.pathname === "/questions" ? "font-bold" : "font-normal"
             } cursor-pointer rounded-l-md`}
           >
-            <FaQuestion />
-            <span>Questions</span>
+            <FaQuestion size={20} />
+            <span className="hidden lg:flex">Questions</span>
           </Link>
-        </div>
-        <div className="text-sm flex flex-col items-start w-full space-y-1">
+        </span>
+        <span>
           <Link
             to="/saved"
-            className={`flex items-center h-fit space-x-2 w-full py-2 px-2 ${
-              location.pathname === "/saved" ? "" : "hover:bg-gray-700"
+            className={`flex items-center space-x-2 ${
+              location.pathname === "/saved"
+                ? ""
+                : `lg:hover:${theme === "dark" ? "bg-gray-700" : "bg-white"}`
             } ${
-              location.pathname === "/saved" ? "bg-slate-800" : "bg-transparent"
+              location.pathname === "/saved"
+                ? `lg:${theme === "dark" ? "bg-gray-800" : "bg-white"}`
+                : "bg-transparent"
             } ${
               location.pathname === "/saved" ? "font-bold" : "font-normal"
             } cursor-pointer rounded-l-md`}
           >
-            <FaSave />
-            <span>Saved</span>
+            <FaSave size={20} />
+            <span className="hidden lg:flex">Saved</span>
           </Link>
+        </span>
+        <span>
           <Link
             to="/users"
-            className={`flex items-center h-fit space-x-2 w-full py-2 px-2 ${
-              location.pathname === "/users" ? "" : "hover:bg-gray-700"
+            className={`flex items-center space-x-2 ${
+              location.pathname === "/users"
+                ? ""
+                : `lg:hover:${theme === "dark" ? "bg-gray-700" : "bg-white"}`
             } ${
-              location.pathname === "/users" ? "bg-slate-800" : "bg-transparent"
+              location.pathname === "/users"
+                ? `lg:${theme === "dark" ? "bg-gray-800" : "bg-white"}`
+                : "bg-transparent"
             } ${
               location.pathname === "/users" ? "font-bold" : "font-normal"
             } cursor-pointer rounded-l-md`}
           >
-            <FaUsers />
-            <span>Users</span>
+            <FaUsers size={20} />
+            <span className="hidden lg:flex">Users</span>
           </Link>
-        </div>
+        </span>
       </div>
     </>
   );

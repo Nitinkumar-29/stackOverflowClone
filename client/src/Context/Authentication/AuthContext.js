@@ -9,9 +9,62 @@ export const AuthProvider = (props) => {
   const [usersData, setUsersData] = useState([]);
   const [loggedUserData, setLoggedUserData] = useState([]);
   const [otherUsersProfileData, setOtherUsersProfileData] = useState([]);
+  const [createAccountCredentials, setCreateAccountCredentials] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    jobTitle: "",
+    address: "",
+  });
   // const host = "http://localhost:8000";
-  const host = "https://techaid-backend.vercel.app"
+  const host = "https://techaid-backend.vercel.app";
   const navigate = useNavigate();
+
+  // handle signup
+  const signUp = async () => {
+    const { name, email, password, confirmPassword } = createAccountCredentials;
+    if (password === confirmPassword) {
+      try {
+        const response = await fetch(`${host}/api/auth/createUser`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // credentials: "include",
+
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            confirmPassword,
+          }),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem("token", data.authToken);
+          toast.success("Account created successfully", {
+            color: "black",
+            backgroundColor: "white",
+            borderRadius: "10px",
+            border: "2px solid rgb(251,146,60)",
+          });
+          navigate("/questions");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      toast.error("Both password doesn't match", {
+        style: {
+          color: "black",
+          backgroundColor: "white",
+          borderRadius: "10px",
+          border: "2px solid rgb(251,146,60)",
+        },
+      });
+    }
+  };
 
   const login = async () => {
     try {
@@ -32,14 +85,7 @@ export const AuthProvider = (props) => {
         localStorage.setItem("token", data.authToken);
         setCredentials({ email: "", password: "" });
         navigate("/questions");
-        toast.success("Logged in successfully!", {
-          style: {
-            color: "black",
-            backgroundColor: "white",
-            borderRadius: "10px",
-            border: "2px solid rgb(251,146,60)",
-          },
-        });
+        toast.success("Logged in successfully!", {});
       } else {
         console.error("password incorrect");
       }
@@ -114,6 +160,9 @@ export const AuthProvider = (props) => {
         navigate,
         handleOtherGetUsersProfile,
         otherUsersProfileData,
+        createAccountCredentials,
+        setCreateAccountCredentials,
+        signUp,
       }}
     >
       {props.children}

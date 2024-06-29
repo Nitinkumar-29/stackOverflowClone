@@ -55,6 +55,8 @@ router.post(
     body("password", "Password should contain atleast 8 characters").isLength({
       min: 8,
     }),
+    body("address"),
+    body("jobTitle"),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -81,6 +83,8 @@ router.post(
       user = await User.create({
         name: req.body.name,
         email: req.body.email,
+        address: req.body.address,
+        jobTitle: req.body.jobTitle,
         password: secPass,
         isVerified: false,
         emailVerificationToken: crypto.randomBytes(64).toString("hex"),
