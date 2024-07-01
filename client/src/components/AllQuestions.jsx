@@ -31,7 +31,7 @@ const AllQuestions = () => {
   }, []);
 
   return (
-    <div className="flex justify-between md:w-screen md:ml-5 lg:mx-0 lg:w-full h-full  p-3">
+    <div className="flex justify-between md:ml-5 lg:mx-0 sm:w-5/6 mx-auto md:w-[95%] h-full  p-3">
       <div className="flex flex-col items-start w-full space-y-2">
         <div className="flex justify-between w-full items-center">
           <div className="flex items-center md:text-3xl">
@@ -44,7 +44,6 @@ const AllQuestions = () => {
             } px-4 py-2 rounded-md border-[1px] border-slate-700`}
           >
             <TbPencilQuestion />
-            <span className="hidden lg:flex"> Ask Question</span>
           </button>
         </div>
         {/* all question section */}
@@ -78,7 +77,7 @@ const AllQuestions = () => {
                         return (
                           <span
                             className="text-sm border-[1px] border-slate-700 px-2 text-slate-500 py-1 rounded"
-                            key={tag[index]}
+                            key={tag}
                           >
                             {tag}
                           </span>

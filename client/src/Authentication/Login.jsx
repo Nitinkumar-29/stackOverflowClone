@@ -40,7 +40,7 @@ const Login = () => {
           <div className="p-3 w-full lg:w-72 flex flex-col items-center">
             <div className="my-5 text-2xl">LogIn</div>
             <form
-              className="space-y-4 flex flex-col items-start w-full p-5 rounded-md bg-inherit border-[1px] border-slate-700"
+              className="space-y-4 flex flex-col items-start w-full sm:w-72 p-5 rounded-md bg-inherit border-[1px] border-slate-700"
               onSubmit={handleLogin}
             >
               <div className="flex flex-col items-start w-full">

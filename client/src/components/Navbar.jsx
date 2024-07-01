@@ -16,7 +16,7 @@ const Navbar = () => {
           theme === "dark"
             ? "bg-slate-950 text-slate-500"
             : "bg-gradient-to-tl from-red-100 via-violet-200 to-green-100 text-gray-800"
-        } flex justify-center border-b-[1px] border-b-gray-700 py-3`}
+        } flex justify-center border-b-[1px] border-slate-700 py-3`}
       >
         <div className="flex justify-between w-[90%] items-center h-12">
           {/* navbar icon and hamburger */}

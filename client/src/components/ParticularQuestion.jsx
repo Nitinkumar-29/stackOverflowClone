@@ -60,9 +60,7 @@ const ParticularQuestion = () => {
   }, [id]);
 
   return (
-    <div
-      className={`flex justify-between md:w-screen md:ml-5 lg:mx-0 w-[95%] mx-auto h-full lg:w-full py-3`}
-    >
+    <div className="flex justify-between md:ml-5 lg:mx-0 sm:w-5/6 mx-auto md:w-[95%] h-full  p-3">
       <div className="flex flex-col w-full hideScrollbar overflow-y-scroll">
         <div className="flex flex-col w-full space-y-3">
           <div className="flex items-center justify-between space-x-1 w-full">
@@ -167,9 +165,12 @@ const ParticularQuestion = () => {
                     <div className="flex items-center flex-wrap ">
                       <div className="text-sm">
                         answered by &nbsp;
-                        <span className="font-medium text-blue-500">
+                        <Link
+                          to={`/users/profile/${answer.user}`}
+                          className="font-medium text-blue-500"
+                        >
                           {answer.userName}
-                        </span>
+                        </Link>
                       </div>
                       <div className="text-sm text-gray-400">
                         <span className="text-black">

@@ -44,17 +44,17 @@ const SignUp = () => {
         }`}
       >
         <div className="p-5 w-full lg:w-[70%] flex flex-col lg:flex-row space-y-2 lg:space-y-0 h-fit items-center my-10 justify-center">
-          <div className="flex flex-col justify-start items-center space-y-6 w-full">
+          <div className="flex flex-col items-center space-y-6 w-full">
             {/* other links like google, faceboook, github to login */}
             <div className="flex md:hidden text-center">
               <span className="text-4xl">Create Account</span>
             </div>
             {/* signup page elements */}
-            <form onSubmit={handleSignUp} className="w-full">
+            <form onSubmit={handleSignUp} className="flex flex-col items-center w-full">
               <div className="hidden md:flex m-6 text-center">
                 <span className="text-4xl">Create Account</span>
               </div>
-              <div className="grid md:grid-cols-2 gap-4 w-full border-[1px] border-slate-700 p-4 rounded-md">
+              <div className="grid md:grid-cols-2 gap-4 w-full sm:w-[80%] md:w-full mx-auto md:mx-0 border-[1px] border-slate-700 p-4 rounded-md">
                 <div className="flex flex-col items-start w-full space-y-1">
                   <label className="font-semibold" htmlFor="name">
                     Display name

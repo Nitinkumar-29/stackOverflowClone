@@ -9,6 +9,7 @@ export const AuthProvider = (props) => {
   const [usersData, setUsersData] = useState([]);
   const [loggedUserData, setLoggedUserData] = useState([]);
   const [otherUsersProfileData, setOtherUsersProfileData] = useState([]);
+  const [userAssociatedQuestion, setUserAssociatedQuestion] = useState([]);
   const [createAccountCredentials, setCreateAccountCredentials] = useState({
     name: "",
     email: "",
@@ -108,6 +109,7 @@ export const AuthProvider = (props) => {
       setLoggedUserData(data);
       console.log(loggedUserData);
       localStorage.setItem("loggedInUserData", data);
+      setUserAssociatedQuestion(data.associatedQuestion);
       console.log(
         "local",
         JSON.stringify(localStorage.getItem("loggedInUserData"))
@@ -163,6 +165,7 @@ export const AuthProvider = (props) => {
         createAccountCredentials,
         setCreateAccountCredentials,
         signUp,
+        userAssociatedQuestion
       }}
     >
       {props.children}

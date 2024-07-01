@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaCamera, FaEdit, FaMoon, FaSun } from "react-icons/fa";
 import { AiFillDelete } from "react-icons/ai";
 import toast from "react-hot-toast";
 import AuthContext from "../Context/Authentication/AuthContext";
 import ThemeContext from "../Context/Theme/ThemeContext";
+import { formatTime } from "../Utils/utils";
 
 const UserProfile = () => {
-  const { token, host, handleGetUser, loggedUserData } =
+  const { token, host, handleGetUser, loggedUserData, userAssociatedQuestion } =
     useContext(AuthContext);
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
   const ref = useRef();
   const [editUser, setEditUser] = useState(false);
@@ -228,13 +229,13 @@ const UserProfile = () => {
         className={`flex justify-center w-full ${
           theme === "dark"
             ? " bg-slate-950 text-slate-500"
-            : "bg-gradient-to-bl from-red-100 via-violet-200 to-green-100 text-black min-h-screen"
+            : "bg-gradient-to-bl from-red-100 via-violet-200 to-green-100 text-black h-full"
         } `}
       >
-        <div className="flex flex-col justify-center w-full lg:w-[90%] h-full space-y-5 p-5">
-          <div className="flex flex-col items-center md:flex-row shadow-md shadow-slate-600 border-[1px] border-slate-700 rounded-md lg:h-[30%] w-full">
+        <div className="flex flex-col justify-center w-full lg:w-[90%] h-fit space-y-5 p-3 lg:py-6">
+          <div className="flex flex-col items-center lg:flex-row shadow-md shadow-slate-600 border-[1px] border-slate-700 rounded-md lg:h-[30%] w-full">
             {/* user image */}
-            <div className="flex items-center h-fit  lg:h-full  lg:w-[25%] p-4">
+            <div className="flex items-center h-fit lg:w-[25%] p-4">
               {!loggedUserData?.user?.profileImage?.data && (
                 <div className="w-fit space-y-3 p-2">
                   {!imagePreview && (
@@ -250,7 +251,7 @@ const UserProfile = () => {
                   {!imagePreview && (
                     <span
                       onClick={handleSelectFile}
-                      className="cursor-pointer w-[80px] lg:w-[120px] rounded-full h-[80px] lg:h-[120px] border-2 border-gray-800 flex items-center justify-center"
+                      className="cursor-pointer w-[80px] lg:w-[120px] rounded-full h-[80px] lg:h-[120px] border-[1px] border-slate-700 flex items-center justify-center"
                     >
                       <FaCamera />
                     </span>
@@ -287,7 +288,7 @@ const UserProfile = () => {
               )}
             </div>
             {loggedUserData?.user && (
-              <div className="flex flex-col space-y-5 lg:space-y-0 lg:flex-row justify-between items-end pb-5 md:w-[75%]">
+              <div className="flex flex-col space-y-5 lg:space-y-0 md:flex-row justify-between lg:items-end lg:w-full items-end pb-5 md:space-x-4 lg:space-x-0 md:w-fit">
                 <div
                   className={`flex flex-col md:space-y-2 ${
                     theme === "dark" ? "text-slate-300" : "text-red-600"
@@ -300,7 +301,7 @@ const UserProfile = () => {
                     {loggedUserData.user.email}
                   </span>
                 </div>
-                <div className="flex flex-col space-y-2 lg:space-x-4 px-4 w-full">
+                <div className="flex flex-col lg:flex-row  space-y-2 lg:space-y-0 lg:space-x-4 px-4 w-full md:w-fit">
                   <button
                     onClick={handleDeleteUser}
                     className="flex items-center w-full lg:w-fit p-2 border-[1px] border-slate-700 h-fit rounded-md"
@@ -324,10 +325,10 @@ const UserProfile = () => {
               </div>
             )}
           </div>
-          <div className="flex flex-col md:flex-row justify-between w-full space-y-4 lg:space-y-0 lg:space-x-4 md:h-[60%]">
-            <div className="flex flex-col space-y-8 shadow-md shadow-slate-600 rounded-md border-[1px] border-gray-700 h-full lg:w-1/2 p-4">
+          <div className="flex flex-col lg:flex-row justify-between w-full space-y-4 lg:space-y-0 lg:space-x-4 md:h-[60%] lg:h-full">
+            <div className="flex flex-col space-y-8 shadow-md shadow-slate-600 rounded-md border-[1px] border-gray-700 h-full lg:h-[62vh] lg:w-1/2 p-4">
               <div className="flex justify-between w-full">
-                <span className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md">
+                <span className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit lg:h-full rounded-md">
                   Basic Information
                 </span>
                 <button
@@ -470,6 +471,100 @@ const UserProfile = () => {
               <span className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md">
                 User Activity
               </span>
+              <div className="mt-3">
+                <span className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md">
+                  Questions
+                </span>{" "}
+                {userAssociatedQuestion?.length > 0 ? (
+                  <div className="py-5 space-y-5 overflow-y-auto hideScrollbar">
+                    {userAssociatedQuestion?.map((question, index) => (
+                      <div key={index}>
+                        <div className="flex flex-col space-y-3 p-3 rounded-md w-full shadow-md shadow-slate-500 border-[1px] border-slate-700">
+                          <div className="flex flex-col space-y-1 items-start">
+                            <Link
+                              onClick={() => console.log(question._id)}
+                              to={`/questions/${question._id}`}
+                              className={`text-sm md:text-base font-medium ${
+                                theme === "dark" ? "text-slate-300" : ""
+                              }`}
+                            >
+                              {question.QuestionTitle}
+                            </Link>
+                            <p className="text-xs md:text-sm">
+                              {question.QuestionDetails.length > 340
+                                ? `${question.QuestionDetails.slice(0, 340)}...`
+                                : question.QuestionDetails}
+                            </p>
+                          </div>
+                          <div className="flex flex-col space-y-3">
+                            <div className="flex flex-wrap gap-3">
+                              {question.QuestionTags.map((tag, index) => {
+                                return (
+                                  <span
+                                    className="text-xs md:text-sm border-[1px] border-slate-700 px-2 text-slate-500 py-1 rounded"
+                                    key={tag}
+                                  >
+                                    {tag}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                            <div className="text-sm">
+                              {formatTime(question.date)}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="flex w-full justify-center my-3">
+                    No data available
+                  </span>
+                )}
+              </div>
+              <div className="mt-3">
+                <span className="flex w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md">
+                  These are the answers for some questions you have answered
+                </span>{" "}
+                {loggedUserData.associatedQuestionAnswers?.length > 0 ? (
+                  <div className="py-5 space-y-5 overflow-y-auto hideScrollbar">
+                    {loggedUserData?.associatedQuestionAnswers?.map(
+                      (answer, index) => (
+                        <div key={index}>
+                          <div className="flex flex-col space-y-3 p-3 rounded-md w-full shadow-md shadow-slate-500 border-[1px] border-slate-700">
+                            <div className="flex flex-col space-y-1 items-start">
+                              <Link
+                                onClick={() => console.log(answer.questionId)}
+                                to={`/questions/${answer.questionId}`}
+                                className={`text-sm md:text-base font-medium ${
+                                  theme === "dark" ? "text-slate-300" : ""
+                                }`}
+                              >
+                                {answer.answerBody}
+                              </Link>
+                              <p className="text-xs md:text-sm">
+                                {answer.answerBody.length > 340
+                                  ? `${answer.QuestionDetails.slice(0, 340)}...`
+                                  : answer.QuestionDetails}
+                              </p>
+                            </div>
+                            <div className="flex flex-col space-y-3">
+                              <div className="text-sm">
+                                {formatTime(answer.date)}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                ) : (
+                  <span className="flex w-full justify-center my-3">
+                    No data available
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </div>

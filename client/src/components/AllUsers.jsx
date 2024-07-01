@@ -13,8 +13,8 @@ const AllUsers = () => {
     // eslint-disable-next-line
   }, [host]);
   return (
-    <div className="flex justify-center md:justify-between md:ml-5 lg:mx-0 w-full h-[89.05vh] hideScrollbar overflow-y-auto max-h-screen">
-      <div className="grid grid-flow-row sm:grid-cols-2 md:grid-cols-3 h-fit gap-5 mt-7">
+    <div className="flex justify-center md:justify-center md:ml-5 lg:mx-0 w-full md:w-[95%] h-[89.05vh] hideScrollbar overflow-y-auto max-h-screen">
+      <div className="grid grid-flow-row sm:grid-cols-2 lg:grid-cols-3 h-fit gap-5 mt-7">
         {usersData &&
           usersData.map((user, index) => {
             return (

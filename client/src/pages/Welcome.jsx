@@ -12,7 +12,7 @@ const Welcome = () => {
           : "bg-gradient-to-bl from-red-100 via-violet-200 to-green-100 text-black"
       } min-h-screen h-[89.05vh] lg:h-[90.7vh] flex items-center justify-center`}
     >
-      <div className="flex flex-col text-center space-y-8 w-[95%]">
+      <div className="flex flex-col items-center text-center space-y-8 w-[95%]">
         <h1 className="flex flex-row text-4xl md:text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-tr from-green-400 via-pink-900 to-red-400">
           Welcome <span>&nbsp;to&nbsp;</span> TechAid
         </h1>

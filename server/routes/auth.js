@@ -165,7 +165,12 @@ router.get("/getUser", fetchUser, async (req, res) => {
   try {
     const userId = req.user.id;
     const user = await User.findById(userId).select("+password");
-    res.send({ user });
+    const associatedQuestion = await Question.find({ user });
+    if (associatedQuestion.length === 0) {
+      return res.status(204).json("No data available");
+    }
+    const associatedQuestionAnswers = await QuestionAnswer.find({ user });
+    res.send({ user, associatedQuestion, associatedQuestionAnswers });
     console.log("Fetched user details");
   } catch (error) {
     console.log(error);

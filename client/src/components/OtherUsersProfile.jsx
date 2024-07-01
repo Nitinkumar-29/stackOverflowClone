@@ -19,8 +19,8 @@ const OtherUsersProfile = () => {
 
   return (
     <>
-      <div className="flex flex-col p-3 space-y-5 h-[82vh] overflow-y-auto hideScrollbar">
-        <div className="flex flex-col space-y-4  rounded-md  h-full w-full lg:w-1/2 py-5">
+      <div className="flex flex-col lg:flex-row p-5  space-y-5 lg:space-y-0 h-[82vh] w-full sm:w-5/6 mx-auto lg:w-[95%] lg:space-x-6 overflow-y-auto">
+        <div className="flex flex-col space-y-4  rounded-md  h-full w-full py-5">
           {otherUsersProfileData?.user?.profileImage?.data && (
             <div className="flex items-center mx-auto p-4">
               {otherUsersProfileData.user?.profileImage?.data ? (
@@ -79,7 +79,7 @@ const OtherUsersProfile = () => {
             )}
           </div>
         </div>
-        <div className=" rounded-md h-full w-full lg:w-1/2 py-5">
+        <div className=" rounded-md h-full w-full py-5">
           <span className="flex w-full justify-center lg:w-fit px-4 py-2 border-[1px] border-slate-700 h-fit rounded-md">
             User Activity
           </span>
@@ -111,7 +111,7 @@ const OtherUsersProfile = () => {
                             return (
                               <span
                                 className="text-xs md:text-sm border-[1px] border-slate-700 px-2 text-slate-500 py-1 rounded"
-                                key={tag[index]}
+                                key={tag}
                               >
                                 {tag}
                               </span>
@@ -128,7 +128,9 @@ const OtherUsersProfile = () => {
               )}
             </div>
           ) : (
-            <span className="flex w-full justify-center my-3">No data available</span>
+            <span className="flex w-full justify-center my-3">
+              No data available
+            </span>
           )}
         </div>
       </div>
