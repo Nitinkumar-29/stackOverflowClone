@@ -103,25 +103,18 @@ router.post(
       const questionId = req.params.id;
       const { id: user, name: userName } = req.user;
       const question = await Question.findById(questionId);
-      // if logged in user is same as author of the question
-      if (question.user.toString() === user) {
-        return res
-          .status(400)
-          .json("You can't answer the question because you are the author");
-      } else {
-        if (!question) {
-          return res.status(404).json({ errors: "question not found" });
-        }
-        const answer = new QuestionAnswer({
-          answerBody,
-          user,
-          userName,
-          questionId,
-        });
-        const savedAnswer = await answer.save();
-        await User.findByIdAndUpdate(user, { $inc: { answerCount: 1 } });
-        res.json(savedAnswer);
+      if (!question) {
+        return res.status(404).json({ errors: "question not found" });
       }
+      const answer = new QuestionAnswer({
+        answerBody,
+        user,
+        userName,
+        questionId,
+      });
+      const savedAnswer = await answer.save();
+      await User.findByIdAndUpdate(user, { $inc: { answerCount: 1 } });
+      res.json(savedAnswer);
     } catch (error) {
       return res.status(400).json("Internal server error");
     }

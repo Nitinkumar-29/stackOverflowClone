@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useParams } from "react-router-dom";
 import "./hideScrollbar.css";
@@ -20,9 +20,11 @@ const ParticularQuestion = () => {
     postQuestionAnswerData,
     setPostQuestionAnswerData,
     voteDown,
+    author,
   } = useContext(QuestionContext);
   const { id } = useParams();
   const { theme } = useContext(ThemeContext);
+  const [isAuthor, setIsAuthor] = useState(false);
 
   useEffect(() => {
     fetchQuestionData(id);
@@ -171,6 +173,10 @@ const ParticularQuestion = () => {
                         >
                           {answer.userName}
                         </Link>
+                        &nbsp;
+                        {answer.user === particularQuestionData.user && (
+                          <span>(author)</span>
+                        )}
                       </div>
                       <div className="text-sm text-gray-400">
                         <span className="text-black">

@@ -9,6 +9,7 @@ const SignUp = () => {
     signUp,
     createAccountCredentials,
     setCreateAccountCredentials,
+    error,isLoading
   } = useContext(AuthContext);
 
   const [passwordType, setPasswordType] = useState("password");
@@ -154,6 +155,7 @@ const SignUp = () => {
                   />
                 </div>
               </div>
+              {isLoading===false&&<span className="mt-3 text-red-700 text-sm">{error}</span>}
               <div className="flex flex-col items-center mx-auto w-full my-3">
                 <button
                   type="submit"

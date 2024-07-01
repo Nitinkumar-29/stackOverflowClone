@@ -86,14 +86,14 @@ const AllQuestions = () => {
                     </div>
                     {question.userName && (
                       <div className="text-sm">
+                        asked by &nbsp;
                         <Link
                           to={`/users/profile/${question.user}`}
                           className="font-medium text-blue-600"
                         >
                           {question?.userName}
-                        </Link>{" "}
-                        {""}
-                        asked {formatTime(question.date)}
+                        </Link>
+                        ,&nbsp;{formatTime(question.date)}
                       </div>
                     )}
                   </div>

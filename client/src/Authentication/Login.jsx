@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { FaGoogle, FaGithub, FaFacebook } from "react-icons/fa";
 
 import { Link } from "react-router-dom";
 import AuthContext from "../Context/Authentication/AuthContext";
@@ -7,7 +6,8 @@ import ThemeContext from "../Context/Theme/ThemeContext";
 
 const Login = () => {
   const [passwordType, setPasswordType] = useState("password");
-  const { credentials, setCredentials, login } = useContext(AuthContext);
+  const { credentials, setCredentials, login, error, isLoading } =
+    useContext(AuthContext);
   const { theme } = useContext(ThemeContext);
 
   const togglePasswordType = () => {
@@ -80,6 +80,7 @@ const Login = () => {
                   <span> Show Password</span>
                 </div>
               </div>
+              {isLoading === false && <span className="text-sm text-red-700">{error}</span>}
               <button
                 type="submit"
                 className="w-full mx-auto px-4 py-2 rounded-md border-[1px] border-slate-700"

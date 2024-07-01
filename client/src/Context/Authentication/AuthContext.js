@@ -18,6 +18,8 @@ export const AuthProvider = (props) => {
     jobTitle: "",
     address: "",
   });
+  const [isLoading, setIsLoading] = useState(null);
+  const [error, setError] = useState("");
   // const host = "http://localhost:8000";
   const host = "https://techaid-backend.vercel.app";
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ export const AuthProvider = (props) => {
   const signUp = async () => {
     const { name, email, password, confirmPassword } = createAccountCredentials;
     if (password === confirmPassword) {
+      setIsLoading(true);
       try {
         const response = await fetch(`${host}/api/auth/createUser`, {
           method: "POST",
@@ -41,6 +44,7 @@ export const AuthProvider = (props) => {
             confirmPassword,
           }),
         });
+        setIsLoading(true);
         if (response.ok) {
           const data = await response.json();
           localStorage.setItem("token", data.authToken);
@@ -53,21 +57,17 @@ export const AuthProvider = (props) => {
           navigate("/questions");
         }
       } catch (error) {
+        setError(error)
         console.error(error);
       }
     } else {
-      toast.error("Both password doesn't match", {
-        style: {
-          color: "black",
-          backgroundColor: "white",
-          borderRadius: "10px",
-          border: "2px solid rgb(251,146,60)",
-        },
-      });
+      setIsLoading(false);
+      setError("fill same password");
     }
   };
 
   const login = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(`${host}/api/auth/login`, {
         method: "POST",
@@ -80,6 +80,7 @@ export const AuthProvider = (props) => {
           password: credentials.password,
         }),
       });
+      setIsLoading(true);
       if (response.ok) {
         const data = await response.json();
         console.log(data);
@@ -88,6 +89,8 @@ export const AuthProvider = (props) => {
         navigate("/questions");
         toast.success("Logged in successfully!", {});
       } else {
+        setIsLoading(false);
+        setError("Invalid credentials");
         console.error("password incorrect");
       }
     } catch (error) {
@@ -150,6 +153,7 @@ export const AuthProvider = (props) => {
   return (
     <AuthContext.Provider
       value={{
+        isLoading,
         setCredentials,
         credentials,
         login,
@@ -165,7 +169,8 @@ export const AuthProvider = (props) => {
         createAccountCredentials,
         setCreateAccountCredentials,
         signUp,
-        userAssociatedQuestion
+        userAssociatedQuestion,
+        error,
       }}
     >
       {props.children}
